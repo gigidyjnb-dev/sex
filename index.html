@@ -5,28 +5,29 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Second Chance Navigator</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@300;400;500;600;700&family=Barlow+Condensed:wght@600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@300;400;500;600;700&family=Barlow+Condensed:wght@600;700&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
 :root {
-  --bg: #f8f9fa;
-  --bg2: #ffffff;
-  --bg3: #e9ecef;
-  --border: rgba(0,0,0,0.1);
-  --accent: #007bff;
-  --accent2: #0056b3;
+  --bg: #0A0F1E;
+  --bg2: #0F1623;
+  --bg3: #141B2D;
+  --border: rgba(255,255,255,0.08);
+  --accent: #2563EB;
+  --accent2: #1E6FFF;
+  --cta: #F59E0B;
   --red: #dc3545;
   --green: #28a745;
-  --blue: #007bff;
-  --text: #212529;
-  --muted: #6c757d;
-  --white: #ffffff;
-  --text-light: #ffffff;
-  --muted-light: #adb5bd;
+  --blue: #2563EB;
+  --text: #F8FAFC;
+  --muted: #94A3B8;
+  --white: #F8FAFC;
+  --text-light: #F8FAFC;
+  --muted-light: #94A3B8;
   --r: 6px;
 }
 *{margin:0;padding:0;box-sizing:border-box;}
 html{scroll-behavior:smooth;}
-body{font-family:'Barlow',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;}
 
 /* SCROLLBAR */
 ::-webkit-scrollbar{width:5px;}
@@ -36,7 +37,7 @@ body{font-family:'Barlow',sans-serif;background:var(--bg);color:var(--text);min-
 /* SIDEBAR NAV */
 .sidebar{
   position:fixed;left:0;top:0;bottom:0;width:220px;
-  background:#2c3e50;
+  background:var(--bg2);
   border-right:1px solid var(--border);
   display:flex;flex-direction:column;
   z-index:200;
@@ -114,7 +115,7 @@ body{font-family:'Barlow',sans-serif;background:var(--bg);color:var(--text);min-
   content:'';position:absolute;inset:0;
   background:radial-gradient(ellipse at 30% 50%,rgba(232,160,32,0.08) 0%,transparent 60%);
 }
-.hero-inner{max-width:700px;position:relative;}
+.hero-inner{text-align:left;position:relative;}
 .hero-tag{
   display:inline-block;
   background:rgba(192,57,43,0.2);border:1px solid rgba(192,57,43,0.4);
@@ -139,8 +140,8 @@ body{font-family:'Barlow',sans-serif;background:var(--bg);color:var(--text);min-
   display:inline-flex;align-items:center;gap:0.4rem;
   text-decoration:none;letter-spacing:0.3px;
 }
-.btn-accent{background:var(--accent);color:var(--white);}
-.btn-accent:hover{background:var(--accent2);transform:translateY(-1px);}
+.btn-accent{background:var(--cta);color:var(--bg);}
+.btn-accent:hover{background:#D97706;transform:scale(1.03);}
 .btn-ghost{background:var(--bg3);color:var(--text);border:1px solid var(--border);}
 .btn-ghost:hover{background:var(--bg);border-color:rgba(0,0,0,0.2);}
 .btn-sm{padding:0.45rem 1rem;font-size:0.8rem;}
@@ -152,11 +153,11 @@ body{font-family:'Barlow',sans-serif;background:var(--bg);color:var(--text);min-
 .grid-2{grid-template-columns:repeat(auto-fit,minmax(280px,1fr));}
 .grid-3{grid-template-columns:repeat(auto-fit,minmax(240px,1fr));}
 .card{
-  background:var(--bg2);border:1px solid var(--border);
+  background:var(--bg3);border:1px solid var(--border);
   border-radius:var(--r);padding:1.5rem;
-  transition:border-color 0.15s;
+  transition:all 0.2s ease;
 }
-.card:hover{border-color:rgba(232,160,32,0.25);}
+.card:hover{transform:translateY(-4px);box-shadow:inset 0 0 0 1px var(--accent);}
 .card-icon{font-size:1.6rem;margin-bottom:0.75rem;}
 .card h3{font-family:'Barlow Condensed',sans-serif;font-size:1.1rem;font-weight:700;letter-spacing:0.5px;color:var(--text);margin-bottom:0.4rem;}
 .card p{font-size:0.85rem;color:var(--muted);line-height:1.6;}
@@ -164,8 +165,8 @@ body{font-family:'Barlow',sans-serif;background:var(--bg);color:var(--text);min-
 
 /* SECTION LABELS */
 .section-head{margin-bottom:1.5rem;}
-.section-head .label{font-size:0.68rem;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:var(--accent);margin-bottom:0.3rem;}
-.section-head h2{font-family:'Barlow Condensed',sans-serif;font-size:1.6rem;font-weight:700;letter-spacing:1px;color:var(--text);}
+.section-head .label{font-size:0.68rem;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:var(--accent);margin-bottom:0.3rem;}
+.section-head h2{font-family:'Barlow Condensed',sans-serif;font-size:3rem;font-weight:800;letter-spacing:1px;color:var(--text);line-height:1;margin-bottom:0.5rem;}
 .section-head p{font-size:0.88rem;color:var(--muted);margin-top:0.3rem;}
 
 /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
@@ -478,9 +479,9 @@ textarea.form-input{resize:vertical;min-height:80px;}
 <div class="page active" id="page-home">
   <div class="hero">
     <div class="hero-inner">
-      <div class="hero-tag">🔥 Built for people who have no money and no choice but to fight</div>
-      <h1>FIGHT BACK.<br><span>ON YOUR OWN.</span></h1>
-      <p>You didn't do this. You're not going to sit down and wait for someone to save you. This platform gives you every tool you need to get off the registry, fight a wrongful conviction, and get the documents you deserve — completely yourself, with AI as your weapon.</p>
+      <div class="hero-tag">Professional Tools for Independent Registry Removal</div>
+      <h1>TAKE CONTROL.<br><span>BUILD YOUR CASE.</span></h1>
+      <p>This platform provides professional-grade tools and AI assistance for men seeking to remove themselves from the sex offender registry, challenge wrongful convictions, and obtain necessary documentation independently. No attorneys required.</p>
       <div class="hero-ctas">
         <button class="btn btn-accent" onclick="goTo('demo')" style="font-size:1rem;padding:0.85rem 2rem;">▶️ Watch How It Works</button>
         <button class="btn btn-ghost" onclick="goTo('decision')">🎯 Build My Action Plan</button>
@@ -488,31 +489,31 @@ textarea.form-input{resize:vertical;min-height:80px;}
     </div>
   </div>
   <div class="content">
-    <div class="section-head"><div class="label">Your Arsenal</div><h2>Four Powerful Tools</h2></div>
+    <div class="section-head"><div class="label">Professional Toolkit</div><h2>Four Essential Tools</h2></div>
     <div class="grid grid-2">
       <div class="card">
         <div class="card-icon">🗺️</div>
         <h3>State-by-State Engine</h3>
-        <p>Pick your state. Get the exact waiting periods, court to file in, specific forms, fee waiver info, and a step-by-step removal roadmap — tailored to your tier and situation.</p>
-        <div class="card-action"><button class="btn btn-ghost btn-sm" onclick="goTo('state')">Open Tool →</button></div>
+        <p>Select your state to receive precise information on waiting periods, filing courts, required forms, fee waiver options, and a customized removal roadmap based on your tier and circumstances.</p>
+        <div class="card-action"><button class="btn btn-ghost btn-sm" onclick="goTo('state')">Access Tool →</button></div>
       </div>
       <div class="card">
         <div class="card-icon">📄</div>
         <h3>Document Drafter</h3>
-        <p>Fill in your details. Get a complete, formatted, ready-to-print legal document — petition for removal, probation completion request, FOIA request, personal statement, fee waiver, and more.</p>
-        <div class="card-action"><button class="btn btn-ghost btn-sm" onclick="goTo('docs')">Open Tool →</button></div>
+        <p>Enter your information to generate complete, professionally formatted, printable legal documents including removal petitions, probation verification requests, FOIA applications, personal statements, fee waivers, and more.</p>
+        <div class="card-action"><button class="btn btn-ghost btn-sm" onclick="goTo('docs')">Access Tool →</button></div>
       </div>
       <div class="card">
         <div class="card-icon">🔍</div>
         <h3>Case Analyzer</h3>
-        <p>Build your personal case timeline. The AI identifies inconsistencies, potential grounds for appeal, constitutional violations, and what evidence you still need to gather.</p>
-        <div class="card-action"><button class="btn btn-ghost btn-sm" onclick="goTo('timeline')">Open Tool →</button></div>
+        <p>Construct a detailed case timeline. AI analysis will identify discrepancies, appeal grounds, constitutional issues, and additional evidence requirements.</p>
+        <div class="card-action"><button class="btn btn-ghost btn-sm" onclick="goTo('timeline')">Access Tool →</button></div>
       </div>
       <div class="card">
         <div class="card-icon">🎯</div>
         <h3>Action Plan Engine</h3>
-        <p>Answer 6 questions about your situation. Get a prioritized, personalized step-by-step action plan telling you exactly what to do first, second, and third.</p>
-        <div class="card-action"><button class="btn btn-ghost btn-sm" onclick="goTo('decision')">Open Tool →</button></div>
+        <p>Respond to 6 targeted questions about your case. Receive a prioritized, customized action plan outlining precise next steps.</p>
+        <div class="card-action"><button class="btn btn-ghost btn-sm" onclick="goTo('decision')">Access Tool →</button></div>
       </div>
     </div>
   </div>
@@ -521,7 +522,7 @@ textarea.form-input{resize:vertical;min-height:80px;}
 <!-- ═══ STATE ENGINE ═══ -->
 <div class="page" id="page-state">
   <div class="topbar">
-    <div><h2>🗺️ State-by-State Engine</h2><p>Select your state to get your exact removal roadmap</p></div>
+    <div><h2>🗺️ State-by-State Engine</h2><p>Select your state for your customized removal roadmap</p></div>
     <div class="badge">All 50 States</div>
   </div>
   <div class="content">
@@ -567,7 +568,7 @@ textarea.form-input{resize:vertical;min-height:80px;}
 <!-- ═══ DOCUMENT DRAFTER ═══ -->
 <div class="page" id="page-docs">
   <div class="topbar">
-    <div><h2>📄 Document Drafter</h2><p>AI-generated, ready-to-print legal documents</p></div>
+    <div><h2>📄 Document Drafter</h2><p>AI-generated professional legal documents</p></div>
   </div>
   <div class="content">
     <div class="section-head">
@@ -644,7 +645,7 @@ textarea.form-input{resize:vertical;min-height:80px;}
 <!-- ═══ CASE ANALYZER ═══ -->
 <div class="page" id="page-timeline">
   <div class="topbar">
-    <div><h2>🔍 Case Analyzer</h2><p>Build your timeline. Find your angles. Know your case.</p></div>
+    <div><h2>🔍 Case Analyzer</h2><p>Build your case timeline and identify key opportunities.</p></div>
   </div>
   <div class="content">
     <div class="section-head">
@@ -788,13 +789,13 @@ textarea.form-input{resize:vertical;min-height:80px;}
       <div class="msg bot">
         <div class="msg-av">⚖️</div>
         <div>
-          <div class="msg-bubble">I'm your Second Chance Navigator. I know the system failed you. I know you don't have money for an attorney. I know someone lied and ruined your life and now you're the one stuck cleaning it up.<br><br>That ends here. Tell me everything about your situation — your state, how long you've been on the registry, what happened, what documents you have. I will help you fight this yourself, step by step, with zero cost.</div>
+          <div class="msg-bubble">Welcome to Second Chance Navigator. This platform offers professional tools and AI-guided assistance to help you navigate registry removal, conviction challenges, and document procurement independently.<br><br>Please provide details about your situation: your state, duration on the registry, circumstances, and available documentation. I will guide you through the process step by step at no cost.</div>
           <div class="qr-wrap">
-            <button class="qr" onclick="sendQuick('I want to get off the registry in my state and I have been on it for 15 years')">I want off the registry</button>
-            <button class="qr" onclick="sendQuick('I need to get proof that I completed probation and my treatment classes but I don\'t know how')">Get my records</button>
-            <button class="qr" onclick="sendQuick('I was wrongfully convicted and I want to know what grounds I can use to fight it')">Fight my conviction</button>
-            <button class="qr" onclick="sendQuick('I am registered in multiple states, what do I do')">Multi-state situation</button>
-            <button class="qr" onclick="sendQuick('What documents do I need to petition for registry removal and how do I get them all')">What do I need?</button>
+            <button class="qr" onclick="sendQuick('I want to get off the registry in my state and I have been on it for 15 years')">Registry removal</button>
+            <button class="qr" onclick="sendQuick('I need to get proof that I completed probation and my treatment classes but I don\'t know how')">Obtain records</button>
+            <button class="qr" onclick="sendQuick('I was wrongfully convicted and I want to know what grounds I can use to fight it')">Challenge conviction</button>
+            <button class="qr" onclick="sendQuick('I am registered in multiple states, what do I do')">Multi-state registration</button>
+            <button class="qr" onclick="sendQuick('What documents do I need to petition for registry removal and how do I get them all')">Required documents</button>
           </div>
         </div>
       </div>
