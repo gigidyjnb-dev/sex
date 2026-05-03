@@ -1,0 +1,2042 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Second Chance Navigator</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@300;400;500;600;700&family=Barlow+Condensed:wght@600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0a0e14;
+  --bg2: #111720;
+  --bg3: #18212e;
+  --border: rgba(255,255,255,0.07);
+  --accent: #e8a020;
+  --accent2: #f0c060;
+  --red: #c0392b;
+  --green: #27ae60;
+  --blue: #2980b9;
+  --text: #d8e0ea;
+  --muted: #6a7d94;
+  --white: #ffffff;
+  --r: 6px;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{font-family:'Barlow',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;}
+
+/* SCROLLBAR */
+::-webkit-scrollbar{width:5px;}
+::-webkit-scrollbar-track{background:var(--bg);}
+::-webkit-scrollbar-thumb{background:var(--bg3);border-radius:3px;}
+
+/* SIDEBAR NAV */
+.sidebar{
+  position:fixed;left:0;top:0;bottom:0;width:220px;
+  background:var(--bg2);
+  border-right:1px solid var(--border);
+  display:flex;flex-direction:column;
+  z-index:200;
+  padding:0 0 1rem;
+}
+.sidebar-logo{
+  padding:1.5rem 1.25rem 1rem;
+  border-bottom:1px solid var(--border);
+  margin-bottom:0.5rem;
+}
+.sidebar-logo h1{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:1.5rem;
+  color:var(--accent);
+  letter-spacing:2px;
+  line-height:1;
+}
+.sidebar-logo p{font-size:0.7rem;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-top:0.3rem;}
+.nav-item{
+  display:flex;align-items:center;gap:0.7rem;
+  padding:0.75rem 1.25rem;
+  cursor:pointer;
+  color:var(--muted);
+  font-size:0.88rem;
+  font-weight:500;
+  letter-spacing:0.3px;
+  transition:all 0.15s;
+  border-left:3px solid transparent;
+  text-decoration:none;
+}
+.nav-item:hover{color:var(--text);background:rgba(255,255,255,0.03);}
+.nav-item.active{color:var(--accent);border-left-color:var(--accent);background:rgba(232,160,32,0.07);}
+.nav-item .icon{font-size:1rem;width:20px;text-align:center;}
+.nav-section{
+  font-size:0.65rem;font-weight:700;letter-spacing:2px;
+  text-transform:uppercase;color:var(--muted);
+  padding:1rem 1.25rem 0.4rem;
+  opacity:0.6;
+}
+
+/* MAIN */
+.main{margin-left:220px;min-height:100vh;}
+
+/* PAGE SECTIONS */
+.page{display:none;min-height:100vh;}
+.page.active{display:block;}
+
+/* TOP BAR */
+.topbar{
+  padding:1.25rem 2rem;
+  border-bottom:1px solid var(--border);
+  background:var(--bg2);
+  display:flex;align-items:center;justify-content:space-between;
+  position:sticky;top:0;z-index:100;
+}
+.topbar h2{font-family:'Barlow Condensed',sans-serif;font-size:1.4rem;font-weight:700;letter-spacing:1px;color:var(--white);}
+.topbar p{font-size:0.8rem;color:var(--muted);}
+.badge{
+  background:rgba(232,160,32,0.15);border:1px solid rgba(232,160,32,0.3);
+  color:var(--accent);font-size:0.7rem;font-weight:700;letter-spacing:1px;
+  text-transform:uppercase;padding:0.25rem 0.7rem;border-radius:20px;
+}
+
+/* CONTENT AREA */
+.content{padding:2rem;}
+
+/* HERO */
+.hero{
+  background:linear-gradient(135deg,var(--bg2) 0%,var(--bg3) 100%);
+  border-bottom:1px solid var(--border);
+  padding:3.5rem 2rem;
+  position:relative;overflow:hidden;
+}
+.hero::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse at 30% 50%,rgba(232,160,32,0.08) 0%,transparent 60%);
+}
+.hero-inner{max-width:700px;position:relative;}
+.hero-tag{
+  display:inline-block;
+  background:rgba(192,57,43,0.2);border:1px solid rgba(192,57,43,0.4);
+  color:#e07060;font-size:0.7rem;font-weight:700;letter-spacing:2px;
+  text-transform:uppercase;padding:0.3rem 0.8rem;border-radius:4px;margin-bottom:1rem;
+}
+.hero h1{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:clamp(2.8rem,5vw,4.5rem);
+  line-height:1;letter-spacing:2px;color:var(--white);
+  margin-bottom:1rem;
+}
+.hero h1 span{color:var(--accent);}
+.hero p{font-size:1.05rem;color:var(--muted);max-width:580px;line-height:1.7;margin-bottom:2rem;font-weight:300;}
+.hero-ctas{display:flex;gap:0.75rem;flex-wrap:wrap;}
+
+/* BUTTONS */
+.btn{
+  padding:0.7rem 1.5rem;border-radius:var(--r);
+  font-family:'Barlow',sans-serif;font-weight:600;font-size:0.88rem;
+  cursor:pointer;border:none;transition:all 0.15s;
+  display:inline-flex;align-items:center;gap:0.4rem;
+  text-decoration:none;letter-spacing:0.3px;
+}
+.btn-accent{background:var(--accent);color:#0a0e14;}
+.btn-accent:hover{background:var(--accent2);transform:translateY(-1px);}
+.btn-ghost{background:rgba(255,255,255,0.06);color:var(--text);border:1px solid var(--border);}
+.btn-ghost:hover{background:rgba(255,255,255,0.1);border-color:rgba(255,255,255,0.15);}
+.btn-sm{padding:0.45rem 1rem;font-size:0.8rem;}
+.btn-danger{background:rgba(192,57,43,0.2);color:#e07060;border:1px solid rgba(192,57,43,0.3);}
+.btn-success{background:rgba(39,174,96,0.15);color:#5dbb85;border:1px solid rgba(39,174,96,0.25);}
+
+/* CARDS */
+.grid{display:grid;gap:1rem;}
+.grid-2{grid-template-columns:repeat(auto-fit,minmax(280px,1fr));}
+.grid-3{grid-template-columns:repeat(auto-fit,minmax(240px,1fr));}
+.card{
+  background:var(--bg2);border:1px solid var(--border);
+  border-radius:var(--r);padding:1.5rem;
+  transition:border-color 0.15s;
+}
+.card:hover{border-color:rgba(232,160,32,0.25);}
+.card-icon{font-size:1.6rem;margin-bottom:0.75rem;}
+.card h3{font-family:'Barlow Condensed',sans-serif;font-size:1.1rem;font-weight:700;letter-spacing:0.5px;color:var(--white);margin-bottom:0.4rem;}
+.card p{font-size:0.85rem;color:var(--muted);line-height:1.6;}
+.card-action{margin-top:1rem;}
+
+/* SECTION LABELS */
+.section-head{margin-bottom:1.5rem;}
+.section-head .label{font-size:0.68rem;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:var(--accent);margin-bottom:0.3rem;}
+.section-head h2{font-family:'Barlow Condensed',sans-serif;font-size:1.6rem;font-weight:700;letter-spacing:1px;color:var(--white);}
+.section-head p{font-size:0.88rem;color:var(--muted);margin-top:0.3rem;}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+/* TOOL 1: STATE ENGINE */
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+.state-selector{
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(80px,1fr));
+  gap:0.4rem;margin-bottom:1.5rem;
+}
+.state-btn{
+  background:var(--bg3);border:1px solid var(--border);
+  color:var(--muted);font-size:0.75rem;font-weight:600;
+  padding:0.5rem 0.3rem;border-radius:4px;cursor:pointer;
+  text-align:center;transition:all 0.15s;font-family:'Barlow',sans-serif;
+}
+.state-btn:hover{border-color:rgba(232,160,32,0.4);color:var(--accent);}
+.state-btn.selected{background:rgba(232,160,32,0.15);border-color:var(--accent);color:var(--accent);}
+
+.state-result{
+  background:var(--bg2);border:1px solid rgba(232,160,32,0.3);
+  border-radius:var(--r);padding:1.5rem;
+  display:none;
+}
+.state-result.show{display:block;}
+.info-row{display:flex;gap:1.5rem;flex-wrap:wrap;margin-bottom:1rem;}
+.info-chip{
+  background:var(--bg3);border:1px solid var(--border);
+  border-radius:4px;padding:0.5rem 0.85rem;
+  font-size:0.8rem;
+}
+.info-chip .label{color:var(--muted);font-size:0.68rem;text-transform:uppercase;letter-spacing:1px;display:block;margin-bottom:0.2rem;}
+.info-chip .val{color:var(--white);font-weight:600;}
+.roadmap-steps{display:flex;flex-direction:column;gap:0.6rem;margin-top:1rem;}
+.roadmap-step{
+  display:flex;gap:0.85rem;align-items:flex-start;
+  background:var(--bg3);border:1px solid var(--border);
+  border-radius:var(--r);padding:0.85rem 1rem;
+}
+.step-num{
+  width:24px;height:24px;border-radius:50%;
+  background:rgba(232,160,32,0.2);border:1px solid rgba(232,160,32,0.4);
+  color:var(--accent);font-size:0.75rem;font-weight:700;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+}
+.step-text strong{color:var(--white);font-size:0.88rem;display:block;}
+.step-text span{color:var(--muted);font-size:0.8rem;}
+
+/* TIER BADGES */
+.tier-badge{
+  display:inline-block;padding:0.2rem 0.6rem;border-radius:4px;
+  font-size:0.7rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;
+}
+.tier-1{background:rgba(39,174,96,0.15);color:#5dbb85;border:1px solid rgba(39,174,96,0.25);}
+.tier-2{background:rgba(232,160,32,0.15);color:var(--accent);border:1px solid rgba(232,160,32,0.25);}
+.tier-3{background:rgba(192,57,43,0.15);color:#e07060;border:1px solid rgba(192,57,43,0.25);}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+/* TOOL 2: DOCUMENT DRAFTER */
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+.doc-types{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:0.75rem;margin-bottom:1.5rem;}
+.doc-type-btn{
+  background:var(--bg2);border:2px solid var(--border);
+  border-radius:var(--r);padding:1.1rem;cursor:pointer;
+  text-align:left;transition:all 0.15s;font-family:'Barlow',sans-serif;
+}
+.doc-type-btn:hover{border-color:rgba(232,160,32,0.3);}
+.doc-type-btn.selected{border-color:var(--accent);background:rgba(232,160,32,0.07);}
+.doc-type-btn .icon{font-size:1.4rem;margin-bottom:0.4rem;}
+.doc-type-btn .title{color:var(--white);font-weight:600;font-size:0.88rem;display:block;}
+.doc-type-btn .desc{color:var(--muted);font-size:0.75rem;margin-top:0.2rem;}
+
+.form-section{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:1.5rem;margin-bottom:1rem;}
+.form-section h4{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:1rem;letter-spacing:0.5px;color:var(--white);margin-bottom:1rem;}
+.form-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:0.75rem;margin-bottom:0.75rem;}
+.form-group{display:flex;flex-direction:column;gap:0.35rem;}
+.form-group label{font-size:0.75rem;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;}
+.form-input{
+  background:var(--bg3);border:1px solid var(--border);
+  border-radius:4px;color:var(--text);
+  font-family:'Barlow',sans-serif;font-size:0.88rem;
+  padding:0.6rem 0.85rem;outline:none;
+  transition:border-color 0.15s;width:100%;
+}
+.form-input:focus{border-color:rgba(232,160,32,0.4);}
+.form-select{appearance:none;cursor:pointer;}
+textarea.form-input{resize:vertical;min-height:80px;}
+
+.doc-output{
+  background:var(--bg);border:1px solid rgba(232,160,32,0.25);
+  border-radius:var(--r);padding:1.5rem;
+  font-family:'Barlow',sans-serif;font-size:0.85rem;
+  line-height:1.8;color:var(--text);white-space:pre-wrap;
+  display:none;position:relative;margin-top:1rem;
+  max-height:500px;overflow-y:auto;
+}
+.doc-output.show{display:block;}
+.doc-toolbar{display:flex;gap:0.5rem;margin-top:0.75rem;}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+/* TOOL 3: TIMELINE / EVIDENCE */
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+.timeline-input-area{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem;}
+.timeline{display:flex;flex-direction:column;gap:0;position:relative;}
+.timeline-entry{
+  display:flex;gap:1rem;padding:0.85rem 0;
+  border-left:2px solid var(--border);
+  margin-left:12px;padding-left:1.25rem;position:relative;
+  animation:fadeSlide 0.3s ease;
+}
+@keyframes fadeSlide{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
+.timeline-entry::before{
+  content:'';position:absolute;left:-7px;top:1.2rem;
+  width:12px;height:12px;border-radius:50%;
+  background:var(--bg3);border:2px solid var(--accent);
+}
+.timeline-entry.flag::before{background:rgba(192,57,43,0.5);border-color:#e07060;}
+.timeline-entry.doc::before{background:rgba(39,174,96,0.3);border-color:#5dbb85;}
+.entry-date{color:var(--accent);font-size:0.78rem;font-weight:600;min-width:90px;padding-top:0.15rem;}
+.entry-content{flex:1;}
+.entry-content strong{color:var(--white);font-size:0.88rem;display:block;}
+.entry-content span{color:var(--muted);font-size:0.8rem;}
+.entry-tag{
+  display:inline-block;font-size:0.65rem;font-weight:700;letter-spacing:1px;
+  text-transform:uppercase;padding:0.15rem 0.5rem;border-radius:3px;margin-top:0.3rem;
+}
+.tag-flag{background:rgba(192,57,43,0.2);color:#e07060;}
+.tag-doc{background:rgba(39,174,96,0.15);color:#5dbb85;}
+.tag-event{background:rgba(41,128,185,0.15);color:#5ba8d8;}
+.tag-witness{background:rgba(155,89,182,0.15);color:#bb8fce;}
+
+.analysis-box{
+  background:var(--bg2);border:1px solid rgba(232,160,32,0.3);
+  border-radius:var(--r);padding:1.25rem;margin-top:1rem;
+  display:none;
+}
+.analysis-box.show{display:block;}
+.finding{
+  display:flex;gap:0.75rem;padding:0.75rem;
+  border-radius:4px;margin-bottom:0.6rem;
+  background:var(--bg3);
+}
+.finding-icon{font-size:1.1rem;flex-shrink:0;}
+.finding-text strong{color:var(--white);font-size:0.85rem;display:block;}
+.finding-text span{color:var(--muted);font-size:0.78rem;}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+/* TOOL 4: DECISION ENGINE */
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+.decision-steps{display:flex;flex-direction:column;gap:1rem;}
+.decision-step{
+  background:var(--bg2);border:1px solid var(--border);
+  border-radius:var(--r);padding:1.25rem;
+  display:none;animation:fadeSlide 0.3s ease;
+}
+.decision-step.active{display:block;}
+.decision-q{font-size:1rem;font-weight:600;color:var(--white);margin-bottom:1rem;}
+.decision-options{display:flex;flex-direction:column;gap:0.5rem;}
+.decision-opt{
+  background:var(--bg3);border:1px solid var(--border);
+  border-radius:4px;padding:0.85rem 1rem;
+  cursor:pointer;font-family:'Barlow',sans-serif;
+  font-size:0.88rem;color:var(--text);text-align:left;
+  transition:all 0.15s;width:100%;
+}
+.decision-opt:hover{border-color:rgba(232,160,32,0.4);color:var(--accent);}
+.decision-opt.chosen{background:rgba(232,160,32,0.1);border-color:var(--accent);color:var(--accent);}
+
+.action-plan{background:var(--bg2);border:1px solid rgba(232,160,32,0.3);border-radius:var(--r);padding:1.5rem;display:none;}
+.action-plan.show{display:block;}
+.action-item{
+  display:flex;gap:0.85rem;margin-bottom:0.85rem;
+  background:var(--bg3);border:1px solid var(--border);
+  border-radius:4px;padding:0.85rem;
+}
+.action-num{
+  width:28px;height:28px;border-radius:50%;
+  background:rgba(232,160,32,0.2);border:1px solid rgba(232,160,32,0.4);
+  color:var(--accent);font-size:0.78rem;font-weight:700;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+}
+.action-body strong{color:var(--white);font-size:0.88rem;display:block;}
+.action-body span{color:var(--muted);font-size:0.8rem;line-height:1.5;}
+.priority-high .action-num{background:rgba(192,57,43,0.2);border-color:rgba(192,57,43,0.4);color:#e07060;}
+.priority-med .action-num{background:rgba(232,160,32,0.2);border-color:rgba(232,160,32,0.4);color:var(--accent);}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+/* CHAT */
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+.chat-wrap{
+  display:flex;flex-direction:column;
+  height:calc(100vh - 80px);
+  background:var(--bg);
+}
+.chat-messages{
+  flex:1;overflow-y:auto;padding:1.5rem 2rem;
+  display:flex;flex-direction:column;gap:1rem;
+}
+.msg{display:flex;gap:0.6rem;max-width:78%;animation:fadeSlide 0.2s ease;}
+.msg.user{align-self:flex-end;flex-direction:row-reverse;}
+.msg-av{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.9rem;flex-shrink:0;}
+.msg.bot .msg-av{background:rgba(232,160,32,0.15);border:1px solid rgba(232,160,32,0.3);}
+.msg.user .msg-av{background:rgba(255,255,255,0.08);}
+.msg-bubble{padding:0.8rem 1rem;border-radius:10px;font-size:0.88rem;line-height:1.65;}
+.msg.bot .msg-bubble{background:var(--bg2);border:1px solid var(--border);color:var(--text);border-top-left-radius:3px;}
+.msg.user .msg-bubble{background:var(--accent);color:#0a0e14;font-weight:500;border-top-right-radius:3px;}
+.qr-wrap{display:flex;flex-wrap:wrap;gap:0.4rem;margin-top:0.5rem;}
+.qr{background:rgba(232,160,32,0.1);border:1px solid rgba(232,160,32,0.3);color:var(--accent2);padding:0.35rem 0.75rem;border-radius:20px;font-size:0.78rem;cursor:pointer;transition:all 0.15s;font-family:'Barlow',sans-serif;}
+.qr:hover{background:rgba(232,160,32,0.2);}
+.typing-dots{display:flex;gap:3px;align-items:center;padding:0.5rem;}
+.dot{width:6px;height:6px;border-radius:50%;background:var(--muted);animation:bounce 1.2s infinite;}
+.dot:nth-child(2){animation-delay:0.2s;}
+.dot:nth-child(3){animation-delay:0.4s;}
+@keyframes bounce{0%,80%,100%{transform:translateY(0)}40%{transform:translateY(-5px)}}
+.chat-input-bar{
+  padding:1rem 2rem;
+  border-top:1px solid var(--border);
+  background:var(--bg2);
+  display:flex;gap:0.75rem;
+}
+#chat-input{
+  flex:1;background:var(--bg3);border:1px solid var(--border);
+  border-radius:6px;color:var(--text);
+  font-family:'Barlow',sans-serif;font-size:0.88rem;
+  padding:0.65rem 1rem;resize:none;outline:none;
+  min-height:42px;max-height:120px;transition:border-color 0.15s;
+}
+#chat-input:focus{border-color:rgba(232,160,32,0.4);}
+#chat-input::placeholder{color:var(--muted);}
+#send-btn{
+  background:var(--accent);border:none;border-radius:6px;
+  color:#0a0e14;font-size:1rem;width:42px;height:42px;
+  cursor:pointer;transition:all 0.15s;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;font-weight:700;
+}
+#send-btn:hover{background:var(--accent2);}
+#send-btn:disabled{opacity:0.4;cursor:not-allowed;}
+
+/* LOADING SPINNER */
+.spinner{display:inline-block;width:16px;height:16px;border:2px solid rgba(232,160,32,0.2);border-top-color:var(--accent);border-radius:50%;animation:spin 0.7s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* MOBILE */
+@media(max-width:768px){
+  .sidebar{transform:translateX(-100%);transition:transform 0.25s;}
+  .sidebar.open{transform:translateX(0);}
+  .main{margin-left:0;}
+  .mobile-menu{display:flex;}
+  .timeline-input-area{grid-template-columns:1fr;}
+}
+.mobile-menu{display:none;position:fixed;top:1rem;left:1rem;z-index:300;
+  background:var(--bg2);border:1px solid var(--border);
+  border-radius:4px;padding:0.5rem;cursor:pointer;font-size:1.2rem;}
+
+/* CHECKLIST PAGE */
+.cl-item{
+  display:flex;gap:0.85rem;align-items:flex-start;
+  background:var(--bg2);border:1px solid var(--border);
+  border-radius:var(--r);padding:1rem 1.1rem;margin-bottom:0.5rem;
+  transition:border-color 0.15s;
+}
+.cl-check{
+  width:20px;height:20px;border:2px solid var(--border);
+  border-radius:4px;flex-shrink:0;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  transition:all 0.15s;margin-top:2px;
+}
+.cl-check.done{background:var(--green);border-color:var(--green);}
+.cl-check.done::after{content:'✓';color:white;font-size:0.75rem;font-weight:700;}
+.cl-text strong{color:var(--white);font-size:0.88rem;display:block;margin-bottom:0.2rem;}
+.cl-text span{color:var(--muted);font-size:0.8rem;}
+.cl-item.done-item{border-color:rgba(39,174,96,0.2);opacity:0.65;}
+.progress-bar{height:6px;background:var(--bg3);border-radius:3px;margin-bottom:1.5rem;overflow:hidden;}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--green),#4be089);border-radius:3px;transition:width 0.4s ease;}
+
+/* DIVIDER */
+.divider{border:none;border-top:1px solid var(--border);margin:1.5rem 0;}
+</style>
+</head>
+<body>
+
+<!-- MOBILE MENU BUTTON -->
+<button class="mobile-menu" onclick="toggleSidebar()">☰</button>
+
+<!-- SIDEBAR -->
+<nav class="sidebar" id="sidebar">
+  <div class="sidebar-logo">
+    <h1>SECOND CHANCE</h1>
+    <p>Navigator Platform</p>
+  </div>
+
+  <div class="nav-section">Start Here</div>
+  <a class="nav-item active" onclick="goTo('home')"><span class="icon">🏠</span> Home</a>
+  <a class="nav-item" onclick="goTo('demo')" style="background:rgba(232,160,32,0.1);border-left:3px solid rgba(232,160,32,0.5);"><span class="icon">▶️</span> <span style="color:var(--accent2)">Interactive Demo</span></a>
+  <a class="nav-item" onclick="goTo('decision')"><span class="icon">🎯</span> My Action Plan</a>
+
+  <div class="nav-section">Tools</div>
+  <a class="nav-item" onclick="goTo('state')"><span class="icon">🗺️</span> State Engine</a>
+  <a class="nav-item" onclick="goTo('docs')"><span class="icon">📄</span> Document Drafter</a>
+  <a class="nav-item" onclick="goTo('timeline')"><span class="icon">🔍</span> Case Analyzer</a>
+  <a class="nav-item" onclick="goTo('checklist')"><span class="icon">✅</span> My Checklist</a>
+
+  <div class="nav-section">AI Guide</div>
+  <a class="nav-item" onclick="goTo('chat')"><span class="icon">💬</span> Navigator Chat</a>
+</nav>
+
+<!-- MAIN -->
+<div class="main">
+
+<!-- ═══ HOME ═══ -->
+<div class="page active" id="page-home">
+  <div class="hero">
+    <div class="hero-inner">
+      <div class="hero-tag">🔥 Built for people who have no money and no choice but to fight</div>
+      <h1>FIGHT BACK.<br><span>ON YOUR OWN.</span></h1>
+      <p>You didn't do this. You're not going to sit down and wait for someone to save you. This platform gives you every tool you need to get off the registry, fight a wrongful conviction, and get the documents you deserve — completely yourself, with AI as your weapon.</p>
+      <div class="hero-ctas">
+        <button class="btn btn-accent" onclick="goTo('demo')" style="font-size:1rem;padding:0.85rem 2rem;">▶️ Watch How It Works</button>
+        <button class="btn btn-ghost" onclick="goTo('decision')">🎯 Build My Action Plan</button>
+      </div>
+    </div>
+  </div>
+  <div class="content">
+    <div class="section-head"><div class="label">Your Arsenal</div><h2>Four Powerful Tools</h2></div>
+    <div class="grid grid-2">
+      <div class="card">
+        <div class="card-icon">🗺️</div>
+        <h3>State-by-State Engine</h3>
+        <p>Pick your state. Get the exact waiting periods, court to file in, specific forms, fee waiver info, and a step-by-step removal roadmap — tailored to your tier and situation.</p>
+        <div class="card-action"><button class="btn btn-ghost btn-sm" onclick="goTo('state')">Open Tool →</button></div>
+      </div>
+      <div class="card">
+        <div class="card-icon">📄</div>
+        <h3>Document Drafter</h3>
+        <p>Fill in your details. Get a complete, formatted, ready-to-print legal document — petition for removal, probation completion request, FOIA request, personal statement, fee waiver, and more.</p>
+        <div class="card-action"><button class="btn btn-ghost btn-sm" onclick="goTo('docs')">Open Tool →</button></div>
+      </div>
+      <div class="card">
+        <div class="card-icon">🔍</div>
+        <h3>Case Analyzer</h3>
+        <p>Build your personal case timeline. The AI identifies inconsistencies, potential grounds for appeal, constitutional violations, and what evidence you still need to gather.</p>
+        <div class="card-action"><button class="btn btn-ghost btn-sm" onclick="goTo('timeline')">Open Tool →</button></div>
+      </div>
+      <div class="card">
+        <div class="card-icon">🎯</div>
+        <h3>Action Plan Engine</h3>
+        <p>Answer 6 questions about your situation. Get a prioritized, personalized step-by-step action plan telling you exactly what to do first, second, and third.</p>
+        <div class="card-action"><button class="btn btn-ghost btn-sm" onclick="goTo('decision')">Open Tool →</button></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ STATE ENGINE ═══ -->
+<div class="page" id="page-state">
+  <div class="topbar">
+    <div><h2>🗺️ State-by-State Engine</h2><p>Select your state to get your exact removal roadmap</p></div>
+    <div class="badge">All 50 States</div>
+  </div>
+  <div class="content">
+    <div class="section-head">
+      <div class="label">Step 1</div>
+      <h2>Select Your State</h2>
+      <p>Then tell us your tier level and registration start date for a custom roadmap.</p>
+    </div>
+    <div class="state-selector" id="state-selector"></div>
+
+    <div class="form-section" id="tier-form" style="display:none;">
+      <h4>Tell Us About Your Situation</h4>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Your Offense Tier (if known)</label>
+          <select class="form-input form-select" id="tier-select">
+            <option value="">-- Select --</option>
+            <option value="1">Tier 1 (lowest)</option>
+            <option value="2">Tier 2 (mid-level)</option>
+            <option value="3">Tier 3 (highest)</option>
+            <option value="unknown">I don't know my tier</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Year You Started Registration</label>
+          <input type="number" class="form-input" id="reg-year" placeholder="e.g. 2010" min="1980" max="2025">
+        </div>
+        <div class="form-group">
+          <label>Are you still on probation/parole?</label>
+          <select class="form-input form-select" id="probation-select">
+            <option value="no">No, I completed it</option>
+            <option value="yes">Yes, still on it</option>
+          </select>
+        </div>
+      </div>
+      <button class="btn btn-accent" onclick="generateStateRoadmap()">Generate My Roadmap</button>
+    </div>
+
+    <div class="state-result" id="state-result"></div>
+  </div>
+</div>
+
+<!-- ═══ DOCUMENT DRAFTER ═══ -->
+<div class="page" id="page-docs">
+  <div class="topbar">
+    <div><h2>📄 Document Drafter</h2><p>AI-generated, ready-to-print legal documents</p></div>
+  </div>
+  <div class="content">
+    <div class="section-head">
+      <div class="label">Step 1</div>
+      <h2>Choose Your Document</h2>
+    </div>
+    <div class="doc-types">
+      <button class="doc-type-btn" onclick="selectDoc('petition')" id="docbtn-petition">
+        <div class="icon">⚖️</div>
+        <span class="title">Registry Removal Petition</span>
+        <div class="desc">Formal petition to be removed from the sex offender registry</div>
+      </button>
+      <button class="doc-type-btn" onclick="selectDoc('probation')" id="docbtn-probation">
+        <div class="icon">📋</div>
+        <span class="title">Probation Completion Request</span>
+        <div class="desc">Letter requesting proof you completed probation</div>
+      </button>
+      <button class="doc-type-btn" onclick="selectDoc('foia')" id="docbtn-foia">
+        <div class="icon">🔓</div>
+        <span class="title">FOIA Records Request</span>
+        <div class="desc">Freedom of Information request for government records</div>
+      </button>
+      <button class="doc-type-btn" onclick="selectDoc('treatment')" id="docbtn-treatment">
+        <div class="icon">🎓</div>
+        <span class="title">Treatment Records Request</span>
+        <div class="desc">Request proof of completed treatment programs/classes</div>
+      </button>
+      <button class="doc-type-btn" onclick="selectDoc('statement')" id="docbtn-statement">
+        <div class="icon">✍️</div>
+        <span class="title">Personal Statement</span>
+        <div class="desc">Statement of rehabilitation for your petition hearing</div>
+      </button>
+      <button class="doc-type-btn" onclick="selectDoc('feewaiver')" id="docbtn-feewaiver">
+        <div class="icon">💰</div>
+        <span class="title">Fee Waiver Request</span>
+        <div class="desc">Request to waive court filing fees due to financial hardship</div>
+      </button>
+    </div>
+
+    <div id="doc-form-area" style="display:none;">
+      <div class="form-section">
+        <h4>Your Information</h4>
+        <div class="form-row">
+          <div class="form-group"><label>Your Full Legal Name</label><input class="form-input" id="df-name" placeholder="John Michael Smith"></div>
+          <div class="form-group"><label>Your Current Address</label><input class="form-input" id="df-address" placeholder="123 Main St, City, State ZIP"></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label>State of Filing/Request</label><input class="form-input" id="df-state" placeholder="e.g. Ohio"></div>
+          <div class="form-group"><label>County</label><input class="form-input" id="df-county" placeholder="e.g. Franklin County"></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label>Case/Conviction Year</label><input class="form-input" id="df-year" placeholder="e.g. 2010"></div>
+          <div class="form-group"><label>Original Charge/Offense</label><input class="form-input" id="df-offense" placeholder="e.g. as listed on your judgment"></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label>Years on Registry</label><input class="form-input" id="df-years-reg" placeholder="e.g. 15"></div>
+          <div class="form-group"><label>Probation Completion Date</label><input class="form-input" id="df-prob-date" placeholder="Month Year or 'unknown'"></div>
+        </div>
+        <div class="form-group" style="margin-top:0.5rem;">
+          <label>Any additional context (optional)</label>
+          <textarea class="form-input" id="df-context" placeholder="E.g. wrongfully convicted, completed all requirements, no violations, stable employment..."></textarea>
+        </div>
+      </div>
+      <button class="btn btn-accent" onclick="generateDocument()" id="gen-doc-btn">⚡ Generate Document</button>
+      <div id="doc-output" class="doc-output"></div>
+      <div class="doc-toolbar" id="doc-toolbar" style="display:none;">
+        <button class="btn btn-ghost btn-sm" onclick="copyDoc()">📋 Copy</button>
+        <button class="btn btn-ghost btn-sm" onclick="printDoc()">🖨️ Print</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ CASE ANALYZER ═══ -->
+<div class="page" id="page-timeline">
+  <div class="topbar">
+    <div><h2>🔍 Case Analyzer</h2><p>Build your timeline. Find your angles. Know your case.</p></div>
+  </div>
+  <div class="content">
+    <div class="section-head">
+      <div class="label">Your Case</div>
+      <h2>Build Your Timeline</h2>
+      <p>Add every event, document, inconsistency, and witness statement. The AI will analyze it and flag potential grounds for relief.</p>
+    </div>
+
+    <div class="form-section">
+      <h4>Add a Timeline Entry</h4>
+      <div class="timeline-input-area">
+        <div class="form-group">
+          <label>Date or Approximate Time</label>
+          <input class="form-input" id="tl-date" placeholder="e.g. June 2009 or 'Before trial'">
+        </div>
+        <div class="form-group">
+          <label>Type of Entry</label>
+          <select class="form-input form-select" id="tl-type">
+            <option value="event">Case Event</option>
+            <option value="flag">Inconsistency / Red Flag</option>
+            <option value="doc">Document / Evidence</option>
+            <option value="witness">Witness Statement</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group" style="margin-bottom:0.75rem;">
+        <label>What Happened / What is This</label>
+        <input class="form-input" id="tl-title" placeholder="Brief title, e.g. 'Accuser changed story during deposition'">
+      </div>
+      <div class="form-group" style="margin-bottom:1rem;">
+        <label>Details (include as much as you know)</label>
+        <textarea class="form-input" id="tl-detail" placeholder="Explain in detail. Who was involved? What was said? What changed? What doesn't add up?"></textarea>
+      </div>
+      <button class="btn btn-accent" onclick="addTimelineEntry()">+ Add to Timeline</button>
+    </div>
+
+    <div id="timeline-container" style="display:none;">
+      <div class="section-head" style="margin-top:1.5rem;">
+        <div class="label">Your Case Timeline</div>
+        <h2>Chronological Record</h2>
+      </div>
+      <div class="timeline" id="timeline-list"></div>
+      <hr class="divider">
+      <button class="btn btn-accent" onclick="analyzeCase()">🔍 Analyze My Case for Grounds</button>
+      <div class="analysis-box" id="analysis-box"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ DECISION / ACTION PLAN ═══ -->
+<div class="page" id="page-decision">
+  <div class="topbar">
+    <div><h2>🎯 My Action Plan</h2><p>Answer a few questions. Get your exact roadmap.</p></div>
+  </div>
+  <div class="content">
+    <div class="section-head">
+      <div class="label">Personalized</div>
+      <h2>What's Your Situation?</h2>
+      <p>Answer honestly. The more accurate your answers, the better your plan.</p>
+    </div>
+
+    <div id="decision-q1" class="decision-step active">
+      <div class="decision-q">1 of 6 — What is your primary goal right now?</div>
+      <div class="decision-options">
+        <button class="decision-opt" onclick="answer('goal','registry','decision-q2')">🗂️ Get removed from the sex offender registry</button>
+        <button class="decision-opt" onclick="answer('goal','wrongful','decision-q2')">⚖️ Fight or appeal a wrongful conviction</button>
+        <button class="decision-opt" onclick="answer('goal','both','decision-q2')">🔥 Both — I was wrongfully convicted AND I'm on the registry</button>
+        <button class="decision-opt" onclick="answer('goal','records','decision-q2')">📄 Get documents / records I need</button>
+      </div>
+    </div>
+
+    <div id="decision-q2" class="decision-step">
+      <div class="decision-q">2 of 6 — How many years have you been on the registry?</div>
+      <div class="decision-options">
+        <button class="decision-opt" onclick="answer('years','under5','decision-q3')">Under 5 years</button>
+        <button class="decision-opt" onclick="answer('years','5to10','decision-q3')">5–10 years</button>
+        <button class="decision-opt" onclick="answer('years','10to15','decision-q3')">10–15 years</button>
+        <button class="decision-opt" onclick="answer('years','over15','decision-q3')">15+ years</button>
+      </div>
+    </div>
+
+    <div id="decision-q3" class="decision-step">
+      <div class="decision-q">3 of 6 — Have you completed all probation / parole?</div>
+      <div class="decision-options">
+        <button class="decision-opt" onclick="answer('probation','yes','decision-q4')">✅ Yes, fully completed</button>
+        <button class="decision-opt" onclick="answer('probation','no','decision-q4')">❌ No, still on probation or parole</button>
+        <button class="decision-opt" onclick="answer('probation','unsure','decision-q4')">❓ I'm not sure / I need to verify</button>
+      </div>
+    </div>
+
+    <div id="decision-q4" class="decision-step">
+      <div class="decision-q">4 of 6 — Did you complete all required treatment or classes?</div>
+      <div class="decision-options">
+        <button class="decision-opt" onclick="answer('treatment','yes_proof','decision-q5')">✅ Yes, and I have proof</button>
+        <button class="decision-opt" onclick="answer('treatment','yes_noproof','decision-q5')">✅ Yes, but I can't find my proof/certificate</button>
+        <button class="decision-opt" onclick="answer('treatment','no','decision-q5')">❌ No / Not required for my case</button>
+      </div>
+    </div>
+
+    <div id="decision-q5" class="decision-step">
+      <div class="decision-q">5 of 6 — Do you have any violations (registry, probation, or new charges) since your conviction?</div>
+      <div class="decision-options">
+        <button class="decision-opt" onclick="answer('violations','none','decision-q6')">✅ Zero violations — clean record since conviction</button>
+        <button class="decision-opt" onclick="answer('violations','minor','decision-q6')">⚠️ Minor / technical violations only</button>
+        <button class="decision-opt" onclick="answer('violations','significant','decision-q6')">❌ Yes, significant violations</button>
+      </div>
+    </div>
+
+    <div id="decision-q6" class="decision-step">
+      <div class="decision-q">6 of 6 — Do you have any of these documents already?</div>
+      <div class="decision-options">
+        <button class="decision-opt" onclick="answer('docs','none','result')">❌ I have almost nothing — starting from zero</button>
+        <button class="decision-opt" onclick="answer('docs','some','result')">📄 I have some documents but not all</button>
+        <button class="decision-opt" onclick="answer('docs','most','result')">📁 I have most documents organized</button>
+      </div>
+    </div>
+
+    <div class="action-plan" id="action-plan"></div>
+  </div>
+</div>
+
+<!-- ═══ CHECKLIST ═══ -->
+<div class="page" id="page-checklist">
+  <div class="topbar">
+    <div><h2>✅ My Checklist</h2><p>Track your progress through every step</p></div>
+  </div>
+  <div class="content">
+    <div class="section-head"><div class="label">Progress</div><h2>Your Master Checklist</h2></div>
+    <div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+    <div id="checklist-container"></div>
+  </div>
+</div>
+
+<!-- ═══ CHAT ═══ -->
+<div class="page" id="page-chat">
+  <div class="topbar">
+    <div><h2>💬 Navigator Chat</h2><p>AI-powered guidance — ask anything about your situation</p></div>
+  </div>
+  <div class="chat-wrap">
+    <div class="chat-messages" id="chat-messages">
+      <div class="msg bot">
+        <div class="msg-av">⚖️</div>
+        <div>
+          <div class="msg-bubble">I'm your Second Chance Navigator. I know the system failed you. I know you don't have money for an attorney. I know someone lied and ruined your life and now you're the one stuck cleaning it up.<br><br>That ends here. Tell me everything about your situation — your state, how long you've been on the registry, what happened, what documents you have. I will help you fight this yourself, step by step, with zero cost.</div>
+          <div class="qr-wrap">
+            <button class="qr" onclick="sendQuick('I want to get off the registry in my state and I have been on it for 15 years')">I want off the registry</button>
+            <button class="qr" onclick="sendQuick('I need to get proof that I completed probation and my treatment classes but I don\'t know how')">Get my records</button>
+            <button class="qr" onclick="sendQuick('I was wrongfully convicted and I want to know what grounds I can use to fight it')">Fight my conviction</button>
+            <button class="qr" onclick="sendQuick('I am registered in multiple states, what do I do')">Multi-state situation</button>
+            <button class="qr" onclick="sendQuick('What documents do I need to petition for registry removal and how do I get them all')">What do I need?</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="chat-input-bar">
+      <textarea id="chat-input" placeholder="Ask anything about your situation..." rows="1" onkeydown="handleChatKey(event)" oninput="autoResize(this)"></textarea>
+      <button id="send-btn" onclick="sendChat()">➤</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ DEMO ═══ -->
+<div class="page" id="page-demo">
+<div class="topbar">
+  <div><h2>▶️ Interactive Demo</h2><p>A guided walkthrough — follow along step by step, or let it run automatically</p></div>
+  <div style="display:flex;gap:0.5rem;align-items:center;">
+    <span id="demo-step-badge" class="badge">Step 1 of 8</span>
+    <button class="btn btn-ghost btn-sm" onclick="demoRestart()">↺ Restart</button>
+  </div>
+</div>
+
+<style>
+/* ── DEMO STYLES ── */
+.demo-shell{display:grid;grid-template-columns:280px 1fr;height:calc(100vh - 70px);overflow:hidden;}
+.demo-sidebar{background:var(--bg2);border-right:1px solid var(--border);overflow-y:auto;padding:1rem 0;}
+.demo-step-item{
+  display:flex;gap:0.75rem;align-items:flex-start;
+  padding:0.75rem 1.25rem;cursor:pointer;
+  border-left:3px solid transparent;
+  transition:all 0.15s;
+}
+.demo-step-item:hover{background:rgba(255,255,255,0.03);}
+.demo-step-item.active{border-left-color:var(--accent);background:rgba(232,160,32,0.06);}
+.demo-step-item.done{border-left-color:var(--green);}
+.demo-step-num{
+  width:26px;height:26px;border-radius:50%;flex-shrink:0;
+  background:var(--bg3);border:1px solid var(--border);
+  display:flex;align-items:center;justify-content:center;
+  font-size:0.75rem;font-weight:700;color:var(--muted);
+  transition:all 0.2s;
+}
+.demo-step-item.active .demo-step-num{background:rgba(232,160,32,0.2);border-color:var(--accent);color:var(--accent);}
+.demo-step-item.done .demo-step-num{background:rgba(39,174,96,0.2);border-color:var(--green);color:var(--green);}
+.demo-step-item.done .demo-step-num::after{content:'✓';}
+.demo-step-label{font-size:0.82rem;font-weight:600;color:var(--muted);line-height:1.3;}
+.demo-step-item.active .demo-step-label{color:var(--text);}
+.demo-step-item.done .demo-step-label{color:var(--muted);text-decoration:line-through;opacity:0.6;}
+.demo-step-sub{font-size:0.72rem;color:var(--muted);opacity:0.7;margin-top:0.2rem;}
+
+.demo-main{overflow-y:auto;display:flex;flex-direction:column;}
+.demo-screen{
+  flex:1;padding:2rem;display:none;
+  animation:fadeSlide 0.35s ease;
+}
+.demo-screen.active{display:block;}
+
+.demo-narrator{
+  background:linear-gradient(135deg,rgba(232,160,32,0.12),rgba(232,160,32,0.06));
+  border:1px solid rgba(232,160,32,0.3);
+  border-radius:var(--r);padding:1.1rem 1.25rem;
+  margin-bottom:1.5rem;
+  display:flex;gap:0.85rem;align-items:flex-start;
+}
+.demo-narrator .nar-icon{font-size:1.3rem;flex-shrink:0;margin-top:0.1rem;}
+.demo-narrator p{font-size:0.9rem;color:var(--cream,#f5f0e8);line-height:1.7;}
+.demo-narrator p strong{color:var(--accent2);}
+
+.demo-highlight{
+  outline:3px solid var(--accent);
+  outline-offset:4px;
+  border-radius:6px;
+  animation:pulse-outline 1.5s ease-in-out infinite;
+}
+@keyframes pulse-outline{0%,100%{outline-color:rgba(232,160,32,0.9)}50%{outline-color:rgba(232,160,32,0.3)}}
+
+.demo-mock{
+  background:var(--bg2);border:1px solid var(--border);
+  border-radius:var(--r);padding:1.5rem;margin-bottom:1.25rem;
+  position:relative;
+}
+.demo-mock h4{font-family:'Barlow Condensed',sans-serif;font-size:1rem;font-weight:700;color:var(--white);letter-spacing:0.5px;margin-bottom:1rem;}
+.demo-mock-label{
+  position:absolute;top:-11px;left:1rem;
+  background:var(--accent);color:var(--bg);
+  font-size:0.65rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;
+  padding:0.15rem 0.6rem;border-radius:3px;
+}
+.demo-type-cursor{
+  display:inline-block;width:2px;height:1em;
+  background:var(--accent);vertical-align:middle;
+  animation:blink 0.8s step-start infinite;margin-left:1px;
+}
+@keyframes blink{50%{opacity:0}}
+
+.demo-nav-bar{
+  padding:1rem 2rem;border-top:1px solid var(--border);
+  background:var(--bg2);display:flex;justify-content:space-between;align-items:center;
+  flex-shrink:0;
+}
+.demo-progress-dots{display:flex;gap:0.4rem;}
+.demo-dot{width:8px;height:8px;border-radius:50%;background:var(--bg3);border:1px solid var(--border);transition:all 0.2s;}
+.demo-dot.done{background:var(--green);border-color:var(--green);}
+.demo-dot.active{background:var(--accent);border-color:var(--accent);}
+
+/* Simulated filled inputs in demo */
+.demo-filled{
+  background:var(--bg3);border:1px solid rgba(232,160,32,0.4);
+  border-radius:4px;color:var(--text);
+  font-family:'Barlow',sans-serif;font-size:0.88rem;
+  padding:0.55rem 0.85rem;display:block;width:100%;
+  font-style:italic;margin-top:0.3rem;
+}
+.demo-state-grid{display:flex;flex-wrap:wrap;gap:0.4rem;margin-bottom:0.75rem;}
+.demo-state-chip{
+  background:var(--bg3);border:1px solid var(--border);
+  color:var(--muted);font-size:0.72rem;font-weight:600;
+  padding:0.35rem 0.5rem;border-radius:4px;
+}
+.demo-state-chip.hl{background:rgba(232,160,32,0.15);border-color:var(--accent);color:var(--accent);}
+.demo-roadmap-step{
+  display:flex;gap:0.75rem;align-items:flex-start;
+  background:var(--bg3);border:1px solid var(--border);
+  border-radius:4px;padding:0.65rem 0.85rem;margin-bottom:0.5rem;
+}
+.demo-step-n{
+  width:22px;height:22px;border-radius:50%;
+  background:rgba(232,160,32,0.2);border:1px solid rgba(232,160,32,0.4);
+  color:var(--accent);font-size:0.72rem;font-weight:700;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+}
+.demo-roadmap-step strong{color:var(--white);font-size:0.82rem;display:block;}
+.demo-roadmap-step span{color:var(--muted);font-size:0.75rem;}
+
+.demo-doc-preview{
+  background:var(--bg);border:1px solid rgba(232,160,32,0.2);
+  border-radius:var(--r);padding:1.25rem;
+  font-family:'Barlow',sans-serif;font-size:0.82rem;
+  line-height:1.9;color:var(--text);margin-top:0.75rem;
+  max-height:280px;overflow-y:auto;white-space:pre-wrap;
+}
+
+.demo-chat-bubble{
+  background:var(--bg2);border:1px solid var(--border);
+  border-radius:10px;border-top-left-radius:3px;
+  padding:0.85rem 1rem;font-size:0.88rem;line-height:1.65;
+  color:var(--text);margin-bottom:0.75rem;max-width:85%;
+}
+.demo-chat-user{
+  background:var(--accent);color:var(--bg);
+  border-radius:10px;border-top-right-radius:3px;
+  padding:0.75rem 1rem;font-size:0.88rem;font-weight:500;
+  margin-left:auto;max-width:75%;margin-bottom:0.75rem;
+}
+.demo-timeline-entry{
+  display:flex;gap:1rem;padding:0.75rem 0;
+  border-left:2px solid var(--border);margin-left:10px;
+  padding-left:1rem;position:relative;margin-bottom:0.25rem;
+}
+.demo-timeline-entry::before{
+  content:'';position:absolute;left:-6px;top:1rem;
+  width:10px;height:10px;border-radius:50%;
+  background:var(--bg3);border:2px solid var(--accent);
+}
+.demo-tl-flag::before{background:rgba(192,57,43,0.4);border-color:#e07060;}
+.demo-tl-date{color:var(--accent);font-size:0.75rem;font-weight:600;min-width:80px;}
+.demo-tl-content strong{color:var(--white);font-size:0.82rem;}
+.demo-tl-content span{color:var(--muted);font-size:0.75rem;display:block;}
+
+.demo-action-item{
+  display:flex;gap:0.75rem;margin-bottom:0.6rem;
+  background:var(--bg3);border:1px solid var(--border);
+  border-radius:4px;padding:0.75rem;
+}
+.demo-action-n{
+  width:24px;height:24px;border-radius:50%;
+  background:rgba(232,160,32,0.2);border:1px solid rgba(232,160,32,0.4);
+  color:var(--accent);font-size:0.72rem;font-weight:700;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+}
+.demo-action-n.red{background:rgba(192,57,43,0.2);border-color:rgba(192,57,43,0.4);color:#e07060;}
+.demo-action-body strong{color:var(--white);font-size:0.82rem;display:block;}
+.demo-action-body span{color:var(--muted);font-size:0.75rem;}
+
+.demo-cl-item{display:flex;gap:0.75rem;align-items:center;background:var(--bg3);border:1px solid var(--border);border-radius:4px;padding:0.6rem 0.85rem;margin-bottom:0.4rem;}
+.demo-cl-box{width:18px;height:18px;border:2px solid var(--border);border-radius:3px;flex-shrink:0;display:flex;align-items:center;justify-content:center;}
+.demo-cl-box.chk{background:var(--green);border-color:var(--green);font-size:0.7rem;color:white;font-weight:700;}
+.demo-cl-text{font-size:0.82rem;color:var(--text);}
+
+.demo-final{
+  text-align:center;padding:2rem;
+  background:linear-gradient(135deg,rgba(39,174,96,0.08),rgba(232,160,32,0.05));
+  border:1px solid rgba(39,174,96,0.25);border-radius:var(--r);
+}
+.demo-final h2{font-family:'Bebas Neue',sans-serif;font-size:2.5rem;color:var(--white);letter-spacing:2px;margin-bottom:0.75rem;}
+.demo-final p{color:var(--muted);font-size:0.95rem;max-width:520px;margin:0 auto 1.5rem;line-height:1.7;}
+</style>
+
+<div class="demo-shell">
+  <!-- STEP SIDEBAR -->
+  <div class="demo-sidebar">
+    <div style="padding:0.5rem 1.25rem 1rem;font-size:0.68rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted);">Demo Steps</div>
+    <div class="demo-step-item active" id="dsi-0" onclick="demoGoTo(0)">
+      <div class="demo-step-num">1</div>
+      <div><div class="demo-step-label">Welcome & Overview</div><div class="demo-step-sub">What this platform does</div></div>
+    </div>
+    <div class="demo-step-item" id="dsi-1" onclick="demoGoTo(1)">
+      <div class="demo-step-num">2</div>
+      <div><div class="demo-step-label">Action Plan Engine</div><div class="demo-step-sub">Answer 6 questions → get your roadmap</div></div>
+    </div>
+    <div class="demo-step-item" id="dsi-2" onclick="demoGoTo(2)">
+      <div class="demo-step-num">3</div>
+      <div><div class="demo-step-label">State Engine</div><div class="demo-step-sub">Your state's exact process</div></div>
+    </div>
+    <div class="demo-step-item" id="dsi-3" onclick="demoGoTo(3)">
+      <div class="demo-step-num">4</div>
+      <div><div class="demo-step-label">Getting Your Records</div><div class="demo-step-sub">Probation, treatment, court docs</div></div>
+    </div>
+    <div class="demo-step-item" id="dsi-4" onclick="demoGoTo(4)">
+      <div class="demo-step-num">5</div>
+      <div><div class="demo-step-label">Document Drafter</div><div class="demo-step-sub">Generate your petition + letters</div></div>
+    </div>
+    <div class="demo-step-item" id="dsi-5" onclick="demoGoTo(5)">
+      <div class="demo-step-num">6</div>
+      <div><div class="demo-step-label">Case Analyzer</div><div class="demo-step-sub">Build timeline, find your grounds</div></div>
+    </div>
+    <div class="demo-step-item" id="dsi-6" onclick="demoGoTo(6)">
+      <div class="demo-step-num">7</div>
+      <div><div class="demo-step-label">AI Chat Guide</div><div class="demo-step-sub">Ask anything, get specific answers</div></div>
+    </div>
+    <div class="demo-step-item" id="dsi-7" onclick="demoGoTo(7)">
+      <div class="demo-step-num">8</div>
+      <div><div class="demo-step-label">Filing Day</div><div class="demo-step-sub">Final checklist → walk out the door</div></div>
+    </div>
+  </div>
+
+  <!-- DEMO CONTENT AREA -->
+  <div class="demo-main" id="demo-main-scroll">
+
+    <!-- STEP 1: WELCOME -->
+    <div class="demo-screen active" id="ds-0">
+      <div class="demo-narrator">
+        <div class="nar-icon">👋</div>
+        <p>Welcome. This is a <strong>live walkthrough</strong> of everything this platform can do for you. We're going to follow a real person — let's call him <strong>Marcus</strong> — who has been on the registry for 15 years in Ohio, was eligible to get off 5 years ago, and didn't know how. By the end of this demo, you'll know exactly how to do everything he does.</p>
+      </div>
+      <div class="demo-mock">
+        <div class="demo-mock-label">THE PLATFORM</div>
+        <h4>Second Chance Navigator — 4 Core Tools</h4>
+        <div class="grid grid-2" style="gap:0.75rem;">
+          <div style="background:var(--bg3);border:1px solid var(--border);border-radius:4px;padding:0.85rem;">
+            <div style="font-size:1.2rem;margin-bottom:0.3rem;">🎯</div>
+            <div style="color:var(--white);font-size:0.85rem;font-weight:600;">Action Plan Engine</div>
+            <div style="color:var(--muted);font-size:0.75rem;margin-top:0.2rem;">6 questions → your personalized step-by-step roadmap</div>
+          </div>
+          <div style="background:var(--bg3);border:1px solid var(--border);border-radius:4px;padding:0.85rem;">
+            <div style="font-size:1.2rem;margin-bottom:0.3rem;">🗺️</div>
+            <div style="color:var(--white);font-size:0.85rem;font-weight:600;">State Engine</div>
+            <div style="color:var(--muted);font-size:0.75rem;margin-top:0.2rem;">All 50 states: exact courts, forms, fees, waiting periods</div>
+          </div>
+          <div style="background:var(--bg3);border:1px solid var(--border);border-radius:4px;padding:0.85rem;">
+            <div style="font-size:1.2rem;margin-bottom:0.3rem;">📄</div>
+            <div style="color:var(--white);font-size:0.85rem;font-weight:600;">Document Drafter</div>
+            <div style="color:var(--muted);font-size:0.75rem;margin-top:0.2rem;">AI generates ready-to-print petitions, letters, FOIA requests</div>
+          </div>
+          <div style="background:var(--bg3);border:1px solid var(--border);border-radius:4px;padding:0.85rem;">
+            <div style="font-size:1.2rem;margin-bottom:0.3rem;">🔍</div>
+            <div style="color:var(--white);font-size:0.85rem;font-weight:600;">Case Analyzer</div>
+            <div style="color:var(--muted);font-size:0.75rem;margin-top:0.2rem;">Build your timeline, find grounds for appeal or relief</div>
+          </div>
+        </div>
+        <div style="margin-top:1rem;background:rgba(232,160,32,0.08);border:1px solid rgba(232,160,32,0.2);border-radius:4px;padding:0.75rem;font-size:0.82rem;color:var(--muted);">
+          <strong style="color:var(--accent);">Marcus's situation:</strong> Convicted 2009, Ohio, Tier 1. Completed probation 2012. Completed treatment 2013. On registry since 2009 — 15 years. Ohio Tier 1 wait = 10 years. <strong style="color:#5dbb85;">He was eligible in 2019.</strong> He just didn't know it.
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 2: ACTION PLAN ENGINE -->
+    <div class="demo-screen" id="ds-1">
+      <div class="demo-narrator">
+        <div class="nar-icon">🎯</div>
+        <p>Marcus starts with the <strong>Action Plan Engine</strong>. He answers 6 quick questions about his situation. The platform doesn't give generic advice — it reads his answers and builds a <strong>prioritized, personalized plan</strong> telling him exactly what to do first.</p>
+      </div>
+      <div class="demo-mock">
+        <div class="demo-mock-label">TOOL: ACTION PLAN ENGINE</div>
+        <h4>Marcus Answers the 6 Questions</h4>
+        <div style="display:flex;flex-direction:column;gap:0.5rem;">
+          <div style="background:var(--bg3);border:1px solid var(--border);border-radius:4px;padding:0.75rem 1rem;">
+            <div style="font-size:0.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:0.4rem;">Q1: Primary goal?</div>
+            <div style="background:rgba(232,160,32,0.12);border:1px solid rgba(232,160,32,0.35);border-radius:4px;padding:0.5rem 0.85rem;color:var(--accent);font-size:0.85rem;font-weight:600;">✅ Get removed from the sex offender registry</div>
+          </div>
+          <div style="background:var(--bg3);border:1px solid var(--border);border-radius:4px;padding:0.75rem 1rem;">
+            <div style="font-size:0.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:0.4rem;">Q2: Years on registry?</div>
+            <div style="background:rgba(232,160,32,0.12);border:1px solid rgba(232,160,32,0.35);border-radius:4px;padding:0.5rem 0.85rem;color:var(--accent);font-size:0.85rem;font-weight:600;">✅ 15+ years</div>
+          </div>
+          <div style="background:var(--bg3);border:1px solid var(--border);border-radius:4px;padding:0.75rem 1rem;">
+            <div style="font-size:0.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:0.4rem;">Q3: Completed probation?</div>
+            <div style="background:rgba(232,160,32,0.12);border:1px solid rgba(232,160,32,0.35);border-radius:4px;padding:0.5rem 0.85rem;color:var(--accent);font-size:0.85rem;font-weight:600;">✅ Yes, fully completed</div>
+          </div>
+          <div style="background:var(--bg3);border:1px solid var(--border);border-radius:4px;padding:0.75rem 1rem;">
+            <div style="font-size:0.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:0.4rem;">Q4: Completed treatment?</div>
+            <div style="background:rgba(232,160,32,0.12);border:1px solid rgba(232,160,32,0.35);border-radius:4px;padding:0.5rem 0.85rem;color:var(--accent);font-size:0.85rem;font-weight:600;">✅ Yes, but can't find proof/certificate</div>
+          </div>
+          <div style="background:var(--bg3);border:1px solid var(--border);border-radius:4px;padding:0.75rem 1rem;">
+            <div style="font-size:0.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:0.4rem;">Q5: Any violations?</div>
+            <div style="background:rgba(232,160,32,0.12);border:1px solid rgba(232,160,32,0.35);border-radius:4px;padding:0.5rem 0.85rem;color:var(--accent);font-size:0.85rem;font-weight:600;">✅ Zero — completely clean record</div>
+          </div>
+          <div style="background:var(--bg3);border:1px solid var(--border);border-radius:4px;padding:0.75rem 1rem;">
+            <div style="font-size:0.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:0.4rem;">Q6: Documents?</div>
+            <div style="background:rgba(232,160,32,0.12);border:1px solid rgba(232,160,32,0.35);border-radius:4px;padding:0.5rem 0.85rem;color:var(--accent);font-size:0.85rem;font-weight:600;">Starting from zero — I have almost nothing</div>
+          </div>
+        </div>
+        <div style="margin-top:1rem;background:rgba(39,174,96,0.08);border:1px solid rgba(39,174,96,0.2);border-radius:4px;padding:0.85rem;font-size:0.82rem;">
+          <strong style="color:#5dbb85;">→ Plan Generated.</strong> <span style="color:var(--muted);">The platform instantly produces Marcus's prioritized action plan. Step 1 is getting his documents — specifically tracking down his lost treatment certificate.</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 3: STATE ENGINE -->
+    <div class="demo-screen" id="ds-2">
+      <div class="demo-narrator">
+        <div class="nar-icon">🗺️</div>
+        <p>His plan says: <strong>"Run the State Engine."</strong> Marcus clicks State Engine, selects Ohio, enters Tier 1 and 2009 as his registration year. The platform calculates that he has been on the registry <strong>15 years</strong> against a <strong>10-year requirement</strong> — and tells him he is <strong>5 years overdue eligible.</strong></p>
+      </div>
+      <div class="demo-mock">
+        <div class="demo-mock-label">TOOL: STATE ENGINE — OHIO</div>
+        <h4>Ohio Registry Removal Roadmap — Generated</h4>
+        <div class="info-row" style="margin-bottom:1rem;display:flex;gap:0.75rem;flex-wrap:wrap;">
+          <div class="info-chip"><span class="label">State</span><span class="val">Ohio</span></div>
+          <div class="info-chip"><span class="label">Tier</span><span class="val"><span class="tier-badge tier-1">Tier 1</span></span></div>
+          <div class="info-chip"><span class="label">Required Wait</span><span class="val">15 years</span></div>
+          <div class="info-chip"><span class="label">Years Registered</span><span class="val">15</span></div>
+          <div class="info-chip"><span class="label">Filing Fee</span><span class="val">$125 (waiver available)</span></div>
+        </div>
+        <div style="background:rgba(39,174,96,0.1);border:1px solid rgba(39,174,96,0.3);border-radius:4px;padding:0.65rem 1rem;margin-bottom:1rem;font-size:0.85rem;color:#5dbb85;font-weight:600;">
+          ✅ ELIGIBLE NOW — You have been on the registry 15 years vs. the 15-year requirement for Ohio Tier 1.
+        </div>
+        <div style="font-size:0.78rem;color:var(--muted);background:var(--bg3);border-radius:4px;padding:0.65rem 1rem;margin-bottom:1rem;">
+          <strong style="color:var(--text);">📋 Ohio Notes:</strong> Ohio overhauled its system. Tier 1 may petition after 15 years. File in Court of Common Pleas. Form: Petition for Removal from the Sex Offender Registry (RC 2950.15). File in common pleas court of county of conviction or residence.
+        </div>
+        <div class="demo-roadmap-step"><div class="demo-step-n">1</div><div><strong>Confirm your tier level</strong><span>Request your registration file from your county sheriff in writing.</span></div></div>
+        <div class="demo-roadmap-step"><div class="demo-step-n">2</div><div><strong>Get certified court documents from Franklin County Clerk of Courts</strong><span>Request: Judgment of Conviction, Sentencing Order, Probation Termination Order.</span></div></div>
+        <div class="demo-roadmap-step"><div class="demo-step-n">3</div><div><strong>Obtain Probation Completion Letter</strong><span>Write to your probation officer or court probation dept. Use Document Drafter to generate the letter.</span></div></div>
+        <div class="demo-roadmap-step"><div class="demo-step-n">4</div><div><strong>Obtain Treatment Completion Certificate</strong><span>Contact program provider. If closed, contact Ohio Dept. of Mental Health and Addiction Services.</span></div></div>
+        <div class="demo-roadmap-step"><div class="demo-step-n">5</div><div><strong>File Petition at: Court of Common Pleas — county of conviction or residence</strong><span>Form: Petition for Removal from the Sex Offender Registry (RC 2950.15)</span></div></div>
+      </div>
+    </div>
+
+    <!-- STEP 4: GETTING RECORDS -->
+    <div class="demo-screen" id="ds-3">
+      <div class="demo-narrator">
+        <div class="nar-icon">📋</div>
+        <p>Marcus's biggest problem: <strong>he can't find his treatment completion certificate</strong> from 2013. The platform tells him exactly how to get it — and what to do if the program has closed. He also needs his probation completion letter. Here's how he gets both.</p>
+      </div>
+      <div class="demo-mock">
+        <div class="demo-mock-label">HOW TO GET YOUR RECORDS</div>
+        <h4>Treatment Certificate — Program May Be Closed</h4>
+        <div style="display:flex;flex-direction:column;gap:0.75rem;">
+          <div style="background:var(--bg3);border:1px solid var(--border);border-radius:4px;padding:0.85rem;">
+            <div style="font-size:0.72rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--accent);margin-bottom:0.4rem;">Option A — Program Still Open</div>
+            <div style="font-size:0.82rem;color:var(--text);">Call or write to the treatment provider directly. Ask for a <strong>Certificate of Completion</strong> or an official letter on letterhead confirming your dates of participation and successful completion. Use the Document Drafter to generate the request letter in 60 seconds.</div>
+          </div>
+          <div style="background:var(--bg3);border:1px solid var(--border);border-radius:4px;padding:0.85rem;">
+            <div style="font-size:0.72rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--accent);margin-bottom:0.4rem;">Option B — Program Closed</div>
+            <div style="font-size:0.82rem;color:var(--text);">Contact the <strong>Ohio Department of Mental Health and Addiction Services</strong> (OhioMHAS) at 1-614-466-2596. They license treatment programs and keep records of closed providers. Ask them who acquired the records when the program closed.</div>
+          </div>
+          <div style="background:var(--bg3);border:1px solid var(--border);border-radius:4px;padding:0.85rem;">
+            <div style="font-size:0.72rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--accent);margin-bottom:0.4rem;">Option C — Court Ordered It</div>
+            <div style="font-size:0.82rem;color:var(--text);">Request your court file from the clerk. The sentencing order will show the treatment was ordered and your probation termination order will confirm it was completed. This can substitute for the certificate in many cases.</div>
+          </div>
+        </div>
+        <div style="margin-top:1rem;background:var(--bg3);border:1px solid var(--border);border-radius:4px;padding:0.85rem;">
+          <div style="font-size:0.72rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#5dbb85;margin-bottom:0.4rem;">Probation Completion Letter</div>
+          <div style="font-size:0.82rem;color:var(--text);">Write to the probation department of the court that supervised you. Use the Document Drafter → "Probation Completion Request." Print it, sign it, mail it certified. They are legally required to respond. Turnaround is usually 2–4 weeks.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 5: DOCUMENT DRAFTER -->
+    <div class="demo-screen" id="ds-4">
+      <div class="demo-narrator">
+        <div class="nar-icon">📄</div>
+        <p>Now Marcus has his records. Time to build his petition. He opens the <strong>Document Drafter</strong>, selects "Registry Removal Petition," fills in his information, and hits Generate. The AI produces a <strong>complete, court-ready petition</strong> in seconds. He can copy it or print it immediately.</p>
+      </div>
+      <div class="demo-mock">
+        <div class="demo-mock-label">TOOL: DOCUMENT DRAFTER — LIVE PREVIEW</div>
+        <h4>Registry Removal Petition — Ohio</h4>
+        <div class="form-row" style="margin-bottom:0.75rem;">
+          <div class="form-group">
+            <label style="font-size:0.72px;color:var(--muted);font-size:0.72rem;text-transform:uppercase;letter-spacing:0.5px;">Full Legal Name</label>
+            <div class="demo-filled" id="demo-name-field">Marcus A. Johnson<span class="demo-type-cursor" id="demo-cursor" style="display:none;"></span></div>
+          </div>
+          <div class="form-group">
+            <label style="font-size:0.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;">State / County</label>
+            <div class="demo-filled">Ohio / Franklin County</div>
+          </div>
+        </div>
+        <div class="form-row" style="margin-bottom:0.75rem;">
+          <div class="form-group">
+            <label style="font-size:0.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;">Conviction Year</label>
+            <div class="demo-filled">2009</div>
+          </div>
+          <div class="form-group">
+            <label style="font-size:0.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;">Years on Registry</label>
+            <div class="demo-filled">15</div>
+          </div>
+        </div>
+        <button class="btn btn-accent btn-sm" onclick="runDemoDocGen()" id="demo-gen-btn">⚡ Generate Petition Document</button>
+        <div id="demo-doc-output" style="display:none;">
+          <div class="demo-doc-preview" id="demo-doc-text"></div>
+          <div style="display:flex;gap:0.5rem;margin-top:0.75rem;">
+            <button class="btn btn-ghost btn-sm" onclick="demoCopyDoc()">📋 Copy Document</button>
+            <button class="btn btn-ghost btn-sm" onclick="demoPrintDoc()">🖨️ Print Document</button>
+          </div>
+          <div style="margin-top:0.75rem;font-size:0.78rem;color:var(--muted);background:rgba(232,160,32,0.06);border:1px solid rgba(232,160,32,0.15);border-radius:4px;padding:0.65rem;">
+            💡 <strong style="color:var(--accent2);">Tip:</strong> Review all [BRACKETED] fields and fill them in before printing. Then have it notarized at your local UPS Store or library (usually free or $5).
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 6: CASE ANALYZER -->
+    <div class="demo-screen" id="ds-5">
+      <div class="demo-narrator">
+        <div class="nar-icon">🔍</div>
+        <p>Marcus also believes his conviction was based on false testimony. He opens the <strong>Case Analyzer</strong> and builds his timeline — adding every event, inconsistency, and red flag. Then he hits Analyze and the AI identifies his <strong>potential grounds for legal relief.</strong></p>
+      </div>
+      <div class="demo-mock">
+        <div class="demo-mock-label">TOOL: CASE ANALYZER — MARCUS'S TIMELINE</div>
+        <h4>Case Timeline — Entered by Marcus</h4>
+        <div class="demo-timeline-entry">
+          <div class="demo-tl-date">June 2009</div>
+          <div class="demo-tl-content"><strong>Arrest — no physical evidence presented</strong><span>Arrested based solely on accuser's statement. No DNA, no physical evidence, no corroborating witnesses.</span></div>
+        </div>
+        <div class="demo-timeline-entry demo-tl-flag">
+          <div class="demo-tl-date">Sept 2009</div>
+          <div class="demo-tl-content"><strong>🚩 Accuser changed story between police report and deposition</strong><span>Original report said location was park. Deposition said it was Marcus's home. Addresses don't match. Defense never raised this.</span></div>
+        </div>
+        <div class="demo-timeline-entry demo-tl-flag">
+          <div class="demo-tl-date">Oct 2009</div>
+          <div class="demo-tl-content"><strong>🚩 Defense attorney failed to call alibi witness</strong><span>Marcus had a coworker who could confirm his whereabouts. Attorney never contacted the witness. No explanation given.</span></div>
+        </div>
+        <div class="demo-timeline-entry">
+          <div class="demo-tl-date">Dec 2009</div>
+          <div class="demo-tl-content"><strong>Convicted — jury deliberated less than 2 hours</strong><span>No physical evidence. Conviction based entirely on accuser testimony that had changed multiple times.</span></div>
+        </div>
+        <div style="margin-top:1rem;background:rgba(192,57,43,0.08);border:1px solid rgba(192,57,43,0.25);border-radius:4px;padding:0.85rem;">
+          <div style="font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#e07060;margin-bottom:0.5rem;">🔍 AI Analysis — Grounds Identified</div>
+          <div style="font-size:0.82rem;color:var(--text);line-height:1.7;">
+            <strong style="color:var(--white);">1. Ineffective Assistance of Counsel</strong> — Failure to call a known alibi witness is a textbook Strickland v. Washington claim.<br>
+            <strong style="color:var(--white);">2. Witness Credibility / False Testimony</strong> — The material inconsistency in the accuser's account between the police report and deposition was never raised at trial.<br>
+            <strong style="color:var(--white);">3. Insufficient Evidence</strong> — Conviction on uncorroborated, changed testimony alone may support a post-conviction claim.<br>
+            <strong style="color:var(--white);">Next step:</strong> Request full trial transcripts from the Franklin County Clerk of Courts. Use the FOIA drafter to request all police and investigation records.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 7: CHAT GUIDE -->
+    <div class="demo-screen" id="ds-6">
+      <div class="demo-narrator">
+        <div class="nar-icon">💬</div>
+        <p>Marcus has a specific question: <strong>his conviction was in Ohio but he also registered in Indiana when he moved there for two years.</strong> He asks the AI Chat Guide how to handle both states. Watch the conversation.</p>
+      </div>
+      <div class="demo-mock">
+        <div class="demo-mock-label">TOOL: AI CHAT GUIDE — LIVE DEMO</div>
+        <h4>Multi-State Situation — Ohio + Indiana</h4>
+        <div class="demo-chat-user">I was convicted in Ohio and lived there for years but I also lived in Indiana for about 2 years and registered there too. Now I'm back in Ohio. How do I handle both states?</div>
+        <div class="demo-chat-bubble" id="demo-chat-response">
+          <span style="color:var(--muted);font-style:italic;" id="demo-chat-typing">Loading AI response...</span>
+        </div>
+        <div id="demo-chat-followup" style="display:none;">
+          <div class="demo-chat-user">What if Indiana says I still owe registration time there?</div>
+          <div class="demo-chat-bubble" id="demo-chat-response2"></div>
+        </div>
+        <div style="margin-top:0.75rem;font-size:0.78rem;color:var(--muted);font-style:italic;">This is a real AI response generated live using the same system as the main chat tool.</div>
+      </div>
+    </div>
+
+    <!-- STEP 8: FILING DAY -->
+    <div class="demo-screen" id="ds-7">
+      <div class="demo-narrator">
+        <div class="nar-icon">🏛️</div>
+        <p>Marcus has everything. This is <strong>Filing Day</strong>. Here's the complete checklist of what he's bringing to the courthouse — and what happens after he files. Every item was generated or tracked using this platform.</p>
+      </div>
+      <div class="demo-mock">
+        <div class="demo-mock-label">FILING DAY — COMPLETE CHECKLIST</div>
+        <h4>Marcus's Filing Package — Franklin County Court of Common Pleas</h4>
+        <div class="demo-cl-item"><div class="demo-cl-box chk">✓</div><div class="demo-cl-text"><strong style="color:var(--white);">Completed petition (RC 2950.15)</strong> — Generated by Document Drafter, notarized</div></div>
+        <div class="demo-cl-item"><div class="demo-cl-box chk">✓</div><div class="demo-cl-text"><strong style="color:var(--white);">Certified copy of Judgment of Conviction</strong> — Obtained from Franklin County Clerk, $0.50/page</div></div>
+        <div class="demo-cl-item"><div class="demo-cl-box chk">✓</div><div class="demo-cl-text"><strong style="color:var(--white);">Probation Completion Letter</strong> — Obtained from Franklin County Probation Dept.</div></div>
+        <div class="demo-cl-item"><div class="demo-cl-box chk">✓</div><div class="demo-cl-text"><strong style="color:var(--white);">Treatment Completion Certificate</strong> — Recovered via Ohio MHAS licensing records</div></div>
+        <div class="demo-cl-item"><div class="demo-cl-box chk">✓</div><div class="demo-cl-text"><strong style="color:var(--white);">Personal Statement</strong> — Generated by Document Drafter, 500 words, reviewed and signed</div></div>
+        <div class="demo-cl-item"><div class="demo-cl-box chk">✓</div><div class="demo-cl-text"><strong style="color:var(--white);">Fee Waiver Request (In Forma Pauperis)</strong> — Generated by Document Drafter, attached to petition</div></div>
+        <div class="demo-cl-item"><div class="demo-cl-box chk">✓</div><div class="demo-cl-text"><strong style="color:var(--white);">Copy of petition mailed to Franklin County DA</strong> — Required by Ohio law, sent certified mail</div></div>
+        <div style="margin-top:1rem;background:rgba(39,174,96,0.1);border:1px solid rgba(39,174,96,0.25);border-radius:4px;padding:1rem;font-size:0.85rem;line-height:1.7;">
+          <strong style="color:#5dbb85;display:block;margin-bottom:0.4rem;">✅ What Happens After You File</strong>
+          <span style="color:var(--text);">The clerk stamps your petition and gives you a case number. The court schedules a hearing — usually 30–90 days out. The prosecutor may object or may not appear. You attend, present your documents, speak briefly about your life and rehabilitation, and the judge rules. If approved, you receive a court order removing you from the registry. You then deliver certified copies of that order to your county sheriff and to the Ohio SORN (Sex Offender Registration and Notification) office. Within 30 days, your name is removed.</span>
+        </div>
+      </div>
+      <div class="demo-final">
+        <div style="font-size:3rem;margin-bottom:0.75rem;">🎉</div>
+        <h2>THAT'S HOW IT'S DONE.</h2>
+        <p>Marcus went from having nothing — no documents, no plan, no idea where to start — to filing a complete petition in the right court with every required document. All of it done himself. No attorney. No money.</p>
+        <p style="margin-top:0.5rem;color:var(--accent2);font-weight:600;">Now it's your turn. Every tool Marcus used is waiting for you.</p>
+        <div style="display:flex;gap:0.75rem;justify-content:center;flex-wrap:wrap;margin-top:1.5rem;">
+          <button class="btn btn-accent" onclick="goTo('decision')" style="font-size:1rem;padding:0.85rem 2rem;">🎯 Start My Action Plan</button>
+          <button class="btn btn-ghost" onclick="goTo('state')">🗺️ Open State Engine</button>
+          <button class="btn btn-ghost" onclick="goTo('docs')">📄 Open Document Drafter</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- NAV BAR -->
+    <div class="demo-nav-bar">
+      <button class="btn btn-ghost btn-sm" onclick="demoPrev()" id="demo-prev-btn" disabled>← Previous</button>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:0.4rem;">
+        <div class="demo-progress-dots" id="demo-dots"></div>
+        <div style="font-size:0.72rem;color:var(--muted);" id="demo-step-label-bot">Step 1 of 8</div>
+      </div>
+      <button class="btn btn-accent btn-sm" onclick="demoNext()" id="demo-next-btn">Next Step →</button>
+    </div>
+  </div>
+</div>
+</div>
+
+</div><!-- /main -->
+
+<script>
+// ══════════════════════════════════════
+// NAVIGATION
+// ══════════════════════════════════════
+function goTo(name) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('page-' + name).classList.add('active');
+  const navItems = document.querySelectorAll('.nav-item');
+  navItems.forEach(n => { if (n.getAttribute('onclick') && n.getAttribute('onclick').includes("'" + name + "'")) n.classList.add('active'); });
+  window.scrollTo(0,0);
+  if (window.innerWidth < 768) document.getElementById('sidebar').classList.remove('open');
+}
+function toggleSidebar() { document.getElementById('sidebar').classList.toggle('open'); }
+
+// ══════════════════════════════════════
+// STATE DATA (comprehensive)
+// ══════════════════════════════════════
+const STATES = {
+  AL:{name:"Alabama",t1:10,t2:25,t3:"life",court:"Circuit Court of your county of residence",fee:"$150 (waiver available)",form:"File a Petition for Relief from Registration Requirements",notes:"Must have no sex offense convictions in last 10 years. Petition filed in circuit court where you reside."},
+  AK:{name:"Alaska",t1:15,t2:25,t3:"life",court:"Superior Court in your judicial district",fee:"$150",form:"Petition for Exemption from Registration",notes:"Alaska uses a risk-based system. Tier 1 may petition after 15 years with no new offenses."},
+  AZ:{name:"Arizona",t1:10,t2:25,t3:"life",court:"Superior Court of the county of conviction",fee:"$300 (fee waiver form available - use Form AZEF-1)",form:"Petition for Termination of Registration Duty",notes:"Must complete all terms of sentence. File in county of original conviction."},
+  AR:{name:"Arkansas",t1:15,t2:25,t3:"life",court:"Circuit Court of your county of residence",fee:"$165",form:"Petition for Relief from Registration",notes:"Petition filed in circuit court of county of current residence."},
+  CA:{name:"California",t1:10,t2:20,t3:"life",court:"Superior Court of your county of residence",fee:"$435 (fee waiver: Form FW-001)",form:"Petition for Termination of Sex Offender Registration (PC 290.5)",notes:"California overhauled its system in 2021. Tier 1 = 10 years minimum. File in county of current residence. Must submit certificate of rehabilitation in some cases."},
+  CO:{name:"Colorado",t1:10,t2:20,t3:"life",court:"District Court of your county of residence",fee:"$224 (waiver available)",form:"Motion to Discontinue Sex Offender Registration",notes:"Colorado uses a risk-based tier system. File in district court where you live."},
+  CT:{name:"Connecticut",t1:10,t2:25,t3:"life",court:"Superior Court — Criminal Division",fee:"$325",form:"Petition for Relief from Registration Obligations",notes:"Must complete treatment. Petition filed in Superior Court."},
+  DE:{name:"Delaware",t1:10,t2:20,t3:"life",court:"Superior Court of your county",fee:"$100",form:"Petition for Removal from the Sex Offender Registry",notes:"File in Superior Court of the county where you reside."},
+  FL:{name:"Florida",t1:"lifetime*",t2:"lifetime",t3:"lifetime",court:"Circuit Court of your county of residence",fee:"$401 (fee waiver: Form AO-1)",form:"Petition for Exemption from the Career Offender Registry / Removal Petition",notes:"Florida is one of the hardest states. Lifetime registration is common. EXCEPTIONS exist: if you were a juvenile, if the victim was close in age, or if your offense was nonviolent. Consult NARSOL-Florida affiliate for current exemption grounds."},
+  GA:{name:"Georgia",t1:10,t2:25,t3:"life",court:"Superior Court of your county of residence",fee:"$200",form:"Petition for Release from Registration Requirements (O.C.G.A. § 42-1-19)",notes:"Georgia has specific grounds for relief. File in Superior Court of county of residence."},
+  HI:{name:"Hawaii",t1:10,t2:25,t3:"life",court:"Circuit Court — First or appropriate circuit",fee:"$275",form:"Motion for Termination of Sex Offender Registration",notes:"File in the circuit court of your circuit of residence."},
+  ID:{name:"Idaho",t1:10,t2:25,t3:"life",court:"District Court of your county of residence",fee:"$136",form:"Petition for Relief from Sex Offender Registration",notes:"Must show rehabilitation and no new crimes. File in district court."},
+  IL:{name:"Illinois",t1:10,t2:20,t3:"life",court:"Circuit Court of your county of residence",fee:"$264",form:"Petition for Termination of Sex Offender Registration (730 ILCS 150)",notes:"Illinois allows relief after 10 years for Tier 1. File in circuit court of your county."},
+  IN:{name:"Indiana",t1:10,t2:20,t3:"life",court:"Court of conviction OR court of county of residence",fee:"$157",form:"Petition to Remove from Sex Offender Registry",notes:"Indiana allows petitions after waiting periods. File in court of original conviction or county of residence."},
+  IA:{name:"Iowa",t1:10,t2:25,t3:"life",court:"District Court of your county of residence",fee:"$185",form:"Petition for Placement on Supervised Registry or Removal",notes:"Iowa has a complex tier system. File in district court of county of residence."},
+  KS:{name:"Kansas",t1:10,t2:25,t3:"life",court:"District Court of your county of residence",fee:"$195",form:"Petition for Removal from Offender Registration",notes:"Kansas requires clean record during registration period. File in district court."},
+  KY:{name:"Kentucky",t1:10,t2:20,t3:"life",court:"Circuit Court of your county of residence",fee:"$148",form:"Motion for Relief from Sex Offender Registration",notes:"File in circuit court of current county of residence."},
+  LA:{name:"Louisiana",t1:15,t2:25,t3:"life",court:"District Court of your parish of residence",fee:"$250",form:"Petition for Modification of Registration Requirements",notes:"Louisiana has strict requirements. File in district court of your parish."},
+  ME:{name:"Maine",t1:10,t2:25,t3:"life",court:"Superior Court",fee:"$120",form:"Petition for Exemption from Registration",notes:"Maine allows petitions after 10 years for Tier 1. File in Superior Court."},
+  MD:{name:"Maryland",t1:15,t2:25,t3:"life",court:"Circuit Court of your county of residence",fee:"$165",form:"Petition for Termination of Registration",notes:"Maryland requires demonstration of rehabilitation. File in circuit court."},
+  MA:{name:"Massachusetts",t1:10,t2:20,t3:"life",court:"Superior Court or District Court",fee:"$275",form:"Motion to Terminate Sex Offender Registry Obligations",notes:"Massachusetts has a Sex Offender Registry Board. Petition goes through SORB process."},
+  MI:{name:"Michigan",t1:15,t2:25,t3:"life",court:"Circuit Court of your county of conviction",fee:"$150",form:"Petition to Be Removed from Sex Offender Registry (MCL 28.728c)",notes:"Michigan allows relief for Tier 1 after 15 years. File in circuit court of original conviction."},
+  MN:{name:"Minnesota",t1:10,t2:25,t3:"life",court:"District Court of your county of residence",fee:"$322",form:"Petition for Removal from Predatory Offender Registry",notes:"Minnesota uses a risk-level system rather than offense tiers. File in district court."},
+  MS:{name:"Mississippi",t1:15,t2:25,t3:"life",court:"Circuit Court of your county of residence",fee:"$150",form:"Petition for Relief from Sex Offender Registration",notes:"Mississippi has strict requirements. File in circuit court of county of residence."},
+  MO:{name:"Missouri",t1:10,t2:25,t3:"life",court:"Circuit Court of your county of conviction",fee:"$163",form:"Petition for Removal from the Sex Offender Registry",notes:"Missouri allows relief after 10 years for Tier 1. File in circuit court of original conviction."},
+  MT:{name:"Montana",t1:10,t2:25,t3:"life",court:"District Court of your county of residence",fee:"$80",form:"Petition for Exemption from Registration Requirements",notes:"Montana has relatively accessible petition process. File in district court."},
+  NE:{name:"Nebraska",t1:15,t2:25,t3:"life",court:"District Court of your county of residence",fee:"$88",form:"Petition for Removal from the Sex Offender Registry",notes:"File in district court of current county of residence."},
+  NV:{name:"Nevada",t1:10,t2:25,t3:"life",court:"District Court of your county of residence",fee:"$270",form:"Petition to be Removed from Tier I Registration",notes:"Nevada allows Tier 1 petitions after 10 years. File in district court."},
+  NH:{name:"New Hampshire",t1:10,t2:25,t3:"life",court:"Superior Court",fee:"$280",form:"Petition for Termination of Registration",notes:"File in Superior Court of your county of residence."},
+  NJ:{name:"New Jersey",t1:15,t2:25,t3:"life",court:"Superior Court — Law Division",fee:"$200",form:"Motion to Terminate Megan's Law Registration",notes:"New Jersey's Megan's Law allows termination motions after 15 years for Tier 1 with demonstrated rehabilitation."},
+  NM:{name:"New Mexico",t1:10,t2:20,t3:"life",court:"District Court of your county of residence",fee:"$132",form:"Petition for Removal from the Sex Offender Registry",notes:"New Mexico allows relief after 10 years. File in district court of your county."},
+  NY:{name:"New York",t1:20,t2:30,t3:"life",court:"County Court or Supreme Court of your county",fee:"$210",form:"Petition for Relief under Correction Law § 168-o",notes:"New York requires 20 years for Level 1. Risk assessment is key. File in county court of your county of residence."},
+  NC:{name:"North Carolina",t1:10,t2:25,t3:"life",court:"Superior Court of your county of residence",fee:"$175",form:"Petition to Terminate Sex Offender Registration (G.S. 14-208.12A)",notes:"North Carolina allows relief after 10 years for certain offenses. File in superior court of county of residence."},
+  ND:{name:"North Dakota",t1:10,t2:25,t3:"life",court:"District Court of your county of residence",fee:"$80",form:"Petition for Exemption from Registration",notes:"File in district court of your county of current residence."},
+  OH:{name:"Ohio",t1:15,t2:25,t3:"life",court:"Court of Common Pleas — county of conviction OR residence",fee:"$125",form:"Petition for Removal from the Sex Offender Registry (RC 2950.15)",notes:"Ohio overhauled its system. Tier 1 may petition after 15 years. File in common pleas court."},
+  OK:{name:"Oklahoma",t1:10,t2:25,t3:"life",court:"District Court of your county of conviction",fee:"$181",form:"Petition for Removal from Sex Offender Registry",notes:"File in district court of the county of original conviction."},
+  OR:{name:"Oregon",t1:10,t2:25,t3:"life",court:"Circuit Court of your county of residence",fee:"$281",form:"Petition for Relief from Reporting Requirements (ORS 163A.125)",notes:"Oregon allows relief after 10 years with completed treatment. File in circuit court."},
+  PA:{name:"Pennsylvania",t1:15,t2:25,t3:"life",court:"Court of Common Pleas of your county of conviction",fee:"$175",form:"Petition for Removal from SORNA Registration",notes:"Pennsylvania's SORNA allows Tier 1 petitions after 15 years. File in common pleas court."},
+  RI:{name:"Rhode Island",t1:10,t2:25,t3:"life",court:"Superior Court",fee:"$160",form:"Petition for Relief from Registration",notes:"File in Superior Court of your county of residence."},
+  SC:{name:"South Carolina",t1:15,t2:25,t3:"life",court:"Circuit Court of your county of residence",fee:"$150",form:"Petition to be Removed from the Sex Offender Registry",notes:"South Carolina requires 15 years for Tier 1. File in circuit court."},
+  SD:{name:"South Dakota",t1:10,t2:25,t3:"life",court:"Circuit Court of your county of residence",fee:"$70",form:"Petition for Removal from Sex Offender Registry",notes:"South Dakota has relatively low fees. File in circuit court of your county."},
+  TN:{name:"Tennessee",t1:10,t2:25,t3:"life",court:"Criminal Court of your county of residence",fee:"$350",form:"Petition for Removal from the Sex Offender Registry (TCA 40-39-207)",notes:"Tennessee allows relief after 10 years for certain offenses. File in criminal court of county of residence."},
+  TX:{name:"Texas",t1:10,t2:25,t3:"life",court:"District Court of your county of residence",fee:"$350 (fee waiver: Statement of Inability to Afford Payment of Court Costs)",form:"Petition for Exemption from Registration under CCP Art. 62.301",notes:"Texas allows exemptions for certain offenders after 10 years. File in district court of county of residence. Fee waivers are available."},
+  UT:{name:"Utah",t1:10,t2:25,t3:"life",court:"District Court of your county of residence",fee:"$375",form:"Petition to Relieve Registration Requirement",notes:"Utah allows relief after 10 years for Tier 1. File in district court."},
+  VT:{name:"Vermont",t1:10,t2:25,t3:"life",court:"Superior Court — Criminal Division",fee:"$265",form:"Petition for Termination of Registration",notes:"File in Superior Court of your county of residence."},
+  VA:{name:"Virginia",t1:15,t2:25,t3:"life",court:"Circuit Court of your city/county of conviction",fee:"$86",form:"Petition for Removal from the Sex Offender Registry (§ 9.1-910)",notes:"Virginia allows relief after 15 years for Tier 1. File in circuit court of original conviction."},
+  WA:{name:"Washington",t1:10,t2:25,t3:"life",court:"Superior Court of your county of residence",fee:"$240",form:"Petition for Relief from Registration (RCW 9A.44.143)",notes:"Washington allows relief after 10 years for Level 1. File in superior court of county of residence."},
+  WV:{name:"West Virginia",t1:10,t2:20,t3:"life",court:"Circuit Court of your county of residence",fee:"$135",form:"Petition for Relief from Registration",notes:"File in circuit court of your county of current residence."},
+  WI:{name:"Wisconsin",t1:15,t2:25,t3:"life",court:"Circuit Court of your county of conviction",fee:"$165",form:"Petition for Termination of Registration (Wis. Stat. 301.45(5))",notes:"Wisconsin allows petitions after 15 years for Tier 1. File in circuit court of original conviction."},
+  WY:{name:"Wyoming",t1:10,t2:25,t3:"life",court:"District Court of your county of conviction",fee:"$95",form:"Petition for Relief from Registration Requirements",notes:"Wyoming has relatively accessible process. File in district court of original conviction."},
+  DC:{name:"Washington D.C.",t1:10,t2:20,t3:"life",court:"Superior Court of D.C.",fee:"$120",form:"Motion for Removal from the Sex Offender Registry",notes:"File in Superior Court of the District of Columbia."}
+};
+
+// Build state selector
+const stateAbbrevs = Object.keys(STATES).sort();
+const selectorEl = document.getElementById('state-selector');
+stateAbbrevs.forEach(abbr => {
+  const btn = document.createElement('button');
+  btn.className = 'state-btn';
+  btn.textContent = abbr;
+  btn.title = STATES[abbr].name;
+  btn.onclick = () => selectState(abbr);
+  selectorEl.appendChild(btn);
+});
+
+let selectedState = null;
+function selectState(abbr) {
+  selectedState = abbr;
+  document.querySelectorAll('.state-btn').forEach(b => b.classList.remove('selected'));
+  document.querySelector(`.state-btn[title="${STATES[abbr].name}"]`).classList.add('selected');
+  document.getElementById('tier-form').style.display = 'block';
+  document.getElementById('state-result').classList.remove('show');
+}
+
+function generateStateRoadmap() {
+  if (!selectedState) return;
+  const s = STATES[selectedState];
+  const tier = document.getElementById('tier-select').value;
+  const regYear = parseInt(document.getElementById('reg-year').value) || 2010;
+  const onProbation = document.getElementById('probation-select').value === 'yes';
+  const yearsOnReg = new Date().getFullYear() - regYear;
+
+  let waitYears = tier === '1' ? s.t1 : tier === '2' ? s.t2 : tier === '3' ? s.t3 : s.t1;
+  let eligible = false;
+  let eligibleYear = '';
+  if (typeof waitYears === 'number') {
+    eligible = yearsOnReg >= waitYears;
+    eligibleYear = regYear + waitYears;
+  }
+
+  const tierHtml = tier === '1' ? '<span class="tier-badge tier-1">Tier 1</span>' :
+                   tier === '2' ? '<span class="tier-badge tier-2">Tier 2</span>' :
+                   tier === '3' ? '<span class="tier-badge tier-3">Tier 3</span>' :
+                   '<span class="tier-badge tier-1">Tier TBD</span>';
+
+  const eligStatus = waitYears === 'life' ? `<span style="color:#e07060">⚠️ Lifetime registration — but exemptions may still exist. See notes below.</span>` :
+    eligible ? `<span style="color:#5dbb85">✅ You appear ELIGIBLE NOW (${yearsOnReg} years on registry vs ${waitYears} year requirement)</span>` :
+    `<span style="color:var(--accent)">⏳ Not yet eligible — need ${waitYears - yearsOnReg} more year(s) (eligible ~${eligibleYear})</span>`;
+
+  const steps = [
+    { t: "Confirm your tier level", d: "If you don't know your tier, request your registration file from your local sheriff's office or state police. Ask for your tier classification in writing." },
+    { t: `Obtain your original court documents`, d: `Request certified copies from the ${s.court}. Ask for: Judgment of Conviction, Sentencing Order, and Probation Termination Order. There is usually a small per-page fee.` },
+    { t: "Get proof of completed probation/parole", d: "Write a letter to the probation department or court clerk requesting a completion letter. Use the Document Drafter tool to generate this letter." },
+    { t: "Get treatment completion records", d: "Contact the program that provided your treatment. If they're closed, contact the state licensing board (usually Dept. of Health) to track down the records." },
+    { t: `File your petition at: ${s.court}`, d: `Use the form: '${s.form}'. ${s.notes}` },
+    { t: `Request fee waiver if needed`, d: `Filing fee is approximately ${s.fee}. If you cannot afford it, request a fee waiver — most courts have a standard form for this.` },
+    { t: "Notify the prosecutor if required", d: "Many states require you to serve notice of your petition on the district attorney's office. Check your state's rules — the chat guide can tell you." },
+    { t: "Attend your hearing", d: "Bring ALL documentation. A written personal statement showing your rehabilitation, stable life, and years without incident can significantly help your case." }
+  ];
+
+  const stepsHtml = steps.map((s, i) => `
+    <div class="roadmap-step">
+      <div class="step-num">${i+1}</div>
+      <div class="step-text"><strong>${s.t}</strong><span>${s.d}</span></div>
+    </div>`).join('');
+
+  const result = document.getElementById('state-result');
+  result.innerHTML = `
+    <h3 style="font-family:'Barlow Condensed',sans-serif;font-size:1.3rem;color:var(--white);margin-bottom:1rem;">${s.name} — Registry Removal Roadmap</h3>
+    <div class="info-row">
+      <div class="info-chip"><span class="label">Years on Registry</span><span class="val">${yearsOnReg}</span></div>
+      <div class="info-chip"><span class="label">Tier</span><span class="val">${tierHtml}</span></div>
+      <div class="info-chip"><span class="label">Wait Period</span><span class="val">${waitYears === 'life' ? 'Lifetime*' : waitYears + ' years'}</span></div>
+      <div class="info-chip"><span class="label">Filing Fee</span><span class="val">${s.fee}</span></div>
+    </div>
+    <p style="margin-bottom:1rem;font-size:0.88rem;">${eligStatus}</p>
+    ${onProbation ? '<div style="background:rgba(192,57,43,0.15);border:1px solid rgba(192,57,43,0.3);border-radius:4px;padding:0.75rem 1rem;margin-bottom:1rem;font-size:0.85rem;color:#e07060;">⚠️ You indicated you are still on probation/parole. Most states require completion of all supervision before you can petition for registry removal. Focus first on completing and documenting your supervision.</div>' : ''}
+    <p style="font-size:0.8rem;color:var(--muted);margin-bottom:1rem;background:var(--bg3);border-radius:4px;padding:0.75rem;"><strong style="color:var(--text);">📋 State Notes:</strong> ${s.notes}</p>
+    <div class="roadmap-steps">${stepsHtml}</div>
+    <div style="margin-top:1rem;display:flex;gap:0.75rem;flex-wrap:wrap;">
+      <button class="btn btn-accent btn-sm" onclick="goTo('docs')">📄 Generate My Petition →</button>
+      <button class="btn btn-ghost btn-sm" onclick="goTo('chat')">💬 Ask About ${s.name} Specifics</button>
+    </div>`;
+  result.classList.add('show');
+}
+
+// ══════════════════════════════════════
+// DOCUMENT DRAFTER
+// ══════════════════════════════════════
+let selectedDocType = null;
+function selectDoc(type) {
+  selectedDocType = type;
+  document.querySelectorAll('.doc-type-btn').forEach(b => b.classList.remove('selected'));
+  document.getElementById('docbtn-' + type).classList.add('selected');
+  document.getElementById('doc-form-area').style.display = 'block';
+  document.getElementById('doc-output').classList.remove('show');
+  document.getElementById('doc-toolbar').style.display = 'none';
+}
+
+async function generateDocument() {
+  if (!selectedDocType) return;
+  const btn = document.getElementById('gen-doc-btn');
+  btn.disabled = true;
+  btn.innerHTML = '<div class="spinner"></div> Generating...';
+
+  const name = document.getElementById('df-name').value || '[YOUR NAME]';
+  const address = document.getElementById('df-address').value || '[YOUR ADDRESS]';
+  const state = document.getElementById('df-state').value || '[STATE]';
+  const county = document.getElementById('df-county').value || '[COUNTY]';
+  const year = document.getElementById('df-year').value || '[YEAR]';
+  const offense = document.getElementById('df-offense').value || '[OFFENSE AS LISTED ON JUDGMENT]';
+  const yearsReg = document.getElementById('df-years-reg').value || '[X]';
+  const probDate = document.getElementById('df-prob-date').value || '[DATE]';
+  const context = document.getElementById('df-context').value || '';
+
+  const docNames = {
+    petition: 'sex offender registry removal petition',
+    probation: 'formal letter requesting proof of probation completion from the probation department or court',
+    foia: 'Freedom of Information Act (FOIA) request for all government records related to this case',
+    treatment: 'formal letter requesting proof of treatment program completion',
+    statement: 'personal statement of rehabilitation to accompany a registry removal petition',
+    feewaiver: 'court fee waiver request due to financial hardship'
+  };
+
+  const prompts = {
+    petition: `Write a formal, complete, court-ready petition for registry removal. This is for ${name}, address: ${address}, filing in ${county} County, ${state}. Convicted in ${year} of: ${offense}. Has been on registry for ${yearsReg} years. Probation completed: ${probDate}. Additional context: ${context}. Format as a real legal document with caption, case section, numbered paragraphs stating grounds, prayer for relief, and signature block. Use standard legal document formatting.`,
+    probation: `Write a formal letter from ${name} (address: ${address}) to the Probation Department of ${county} County, ${state}, requesting an official letter confirming completion of probation for a conviction in ${year} of ${offense}. The letter should be professional, polite, cite their right to these records, and ask for the letter to be notarized or on official letterhead. Include date placeholder, reference line, and signature block.`,
+    foia: `Write a complete Freedom of Information Act (FOIA) request letter from ${name} (address: ${address}) to the appropriate government agency in ${state}, requesting ALL records related to their case from ${year} involving ${offense}. Include: request for police reports, investigation records, evidence logs, witness statements, prosecutor notes. Cite applicable FOIA law. Include fee waiver request based on financial hardship. Professional format with all proper components.`,
+    treatment: `Write a formal letter from ${name} (address: ${address}) to a treatment program provider in ${state}, requesting an official certificate or letter confirming completion of a court-ordered treatment program related to a ${year} conviction of ${offense}. If the original provider may be closed, include alternative request language for state licensing board. Professional format.`,
+    statement: `Write a powerful, sincere personal statement from ${name} for inclusion with a registry removal petition in ${state}. This person has been on the registry for ${yearsReg} years after a ${year} conviction of ${offense}. Additional context: ${context}. The statement should cover: acknowledgment of their past, what they have done since (rehabilitation, stability, compliance), impact of the registry on their life and family, why removal serves justice and public interest, and their commitment going forward. First person, genuine, compelling but not melodramatic. 400-600 words.`,
+    feewaiver: `Write a formal court fee waiver request (In Forma Pauperis motion) from ${name} (address: ${address}) to the ${county} County Court in ${state}. The person is filing a petition for registry removal and cannot afford the filing fee due to financial hardship directly related to sex offender registry status (employment discrimination, inability to find work). Include: statement of financial situation, income, expenses, reason fees should be waived. Proper legal format with signature block.`
+  };
+
+  try {
+    const response = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1000,
+        system: `You are a legal document drafting tool for people who cannot afford attorneys. You generate complete, professional, court-ready legal documents based on the information provided. Fill in all blanks with placeholder text in [BRACKETS] where info is missing. Format documents properly with all required sections. Include a note at the top: "REVIEW CAREFULLY — Fill in any remaining [BRACKETED] sections before filing."`,
+        messages: [{ role: 'user', content: prompts[selectedDocType] }]
+      })
+    });
+    const data = await response.json();
+    const text = data.content?.[0]?.text || 'Error generating document. Please try again.';
+    const output = document.getElementById('doc-output');
+    output.textContent = text;
+    output.classList.add('show');
+    document.getElementById('doc-toolbar').style.display = 'flex';
+  } catch(e) {
+    document.getElementById('doc-output').textContent = 'Connection error. Please try again.';
+    document.getElementById('doc-output').classList.add('show');
+  }
+
+  btn.disabled = false;
+  btn.innerHTML = '⚡ Generate Document';
+}
+
+function copyDoc() {
+  const text = document.getElementById('doc-output').textContent;
+  navigator.clipboard.writeText(text);
+  const btn = event.target;
+  btn.textContent = '✓ Copied!';
+  setTimeout(() => btn.textContent = '📋 Copy', 2000);
+}
+function printDoc() {
+  const text = document.getElementById('doc-output').textContent;
+  const win = window.open('','_blank');
+  win.document.write(`<html><head><title>Document</title><style>body{font-family:serif;font-size:12pt;line-height:1.8;margin:1in;white-space:pre-wrap;}</style></head><body>${text}</body></html>`);
+  win.print();
+}
+
+// ══════════════════════════════════════
+// CASE TIMELINE ANALYZER
+// ══════════════════════════════════════
+let timelineEntries = [];
+function addTimelineEntry() {
+  const date = document.getElementById('tl-date').value.trim();
+  const type = document.getElementById('tl-type').value;
+  const title = document.getElementById('tl-title').value.trim();
+  const detail = document.getElementById('tl-detail').value.trim();
+  if (!date || !title) { alert('Please enter at least a date and title.'); return; }
+
+  timelineEntries.push({ date, type, title, detail });
+  renderTimeline();
+
+  document.getElementById('tl-date').value = '';
+  document.getElementById('tl-title').value = '';
+  document.getElementById('tl-detail').value = '';
+}
+
+const typeLabels = { event:'Case Event', flag:'Red Flag', doc:'Document', witness:'Witness' };
+const typeTags = { event:'tag-event', flag:'tag-flag', doc:'tag-doc', witness:'tag-witness' };
+
+function renderTimeline() {
+  document.getElementById('timeline-container').style.display = 'block';
+  const list = document.getElementById('timeline-list');
+  list.innerHTML = timelineEntries.map((e, i) => `
+    <div class="timeline-entry ${e.type}">
+      <div class="entry-date">${e.date}</div>
+      <div class="entry-content">
+        <strong>${e.title}</strong>
+        ${e.detail ? `<span>${e.detail}</span>` : ''}
+        <div><span class="entry-tag ${typeTags[e.type]}">${typeLabels[e.type]}</span></div>
+      </div>
+    </div>`).join('');
+  document.getElementById('analysis-box').classList.remove('show');
+}
+
+async function analyzeCase() {
+  if (timelineEntries.length < 2) { alert('Add at least 2-3 entries before analyzing.'); return; }
+  const box = document.getElementById('analysis-box');
+  box.classList.add('show');
+  box.innerHTML = '<div style="display:flex;align-items:center;gap:0.75rem;"><div class="spinner"></div><span style="color:var(--muted)">Analyzing your case timeline...</span></div>';
+
+  const timelineText = timelineEntries.map(e => `[${e.date}] [${e.type.toUpperCase()}] ${e.title}: ${e.detail}`).join('\n');
+
+  try {
+    const response = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1000,
+        system: `You are a case analysis expert helping someone who believes they were wrongfully convicted or treated unjustly by the legal system. Analyze their case timeline and identify: 1) Potential legal grounds for relief (ineffective counsel, prosecutorial misconduct, false testimony, insufficient evidence, constitutional violations), 2) Key inconsistencies or red flags, 3) Missing evidence or documents they should try to obtain, 4) Strongest angles to pursue. Be specific and direct. Format as numbered findings. Do not recommend they hire an attorney — they are handling this themselves.`,
+        messages: [{ role: 'user', content: `Analyze this case timeline and identify grounds for relief, inconsistencies, and what I should do:\n\n${timelineText}` }]
+      })
+    });
+    const data = await response.json();
+    const text = data.content?.[0]?.text || 'Could not analyze. Please try again.';
+    box.innerHTML = `<h4 style="font-family:'Barlow Condensed',sans-serif;color:var(--white);margin-bottom:1rem;">🔍 Case Analysis Results</h4><div style="font-size:0.88rem;line-height:1.8;white-space:pre-wrap;color:var(--text);">${text}</div><div style="margin-top:1rem;"><button class="btn btn-ghost btn-sm" onclick="copyAnalysis()">📋 Copy Analysis</button></div>`;
+  } catch(e) {
+    box.innerHTML = '<span style="color:#e07060">Connection error. Please try again.</span>';
+  }
+}
+function copyAnalysis() {
+  const text = document.getElementById('analysis-box').textContent;
+  navigator.clipboard.writeText(text);
+}
+
+// ══════════════════════════════════════
+// DECISION ENGINE / ACTION PLAN
+// ══════════════════════════════════════
+let answers = {};
+function answer(key, val, nextId) {
+  answers[key] = val;
+  event.target.classList.add('chosen');
+  setTimeout(() => {
+    if (nextId === 'result') {
+      buildActionPlan();
+    } else {
+      document.getElementById(nextId).classList.add('active');
+      document.getElementById(nextId).scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+  }, 300);
+}
+
+function buildActionPlan() {
+  const plan = document.getElementById('action-plan');
+  plan.classList.add('show');
+  plan.scrollIntoView({ behavior: 'smooth' });
+
+  const items = [];
+  const { goal, years, probation, treatment, violations, docs } = answers;
+
+  // ALWAYS FIRST: get documents
+  if (docs === 'none' || docs === 'some') {
+    items.push({ priority:'high', title:'🔥 FIRST: Gather your core documents', detail:'You need: (1) Certified copy of your original judgment from the court clerk. (2) Probation completion letter from your PO or court. (3) Treatment completion certificate. Use the Document Drafter tool to generate the request letters right now.' });
+  }
+
+  // Probation still ongoing
+  if (probation === 'no') {
+    items.push({ priority:'high', title:'⚠️ Complete your supervision first', detail:'Most states require full completion of probation/parole before you can petition for registry removal. Focus on completing this and documenting every requirement you finish.' });
+  }
+
+  // Treatment proof missing
+  if (treatment === 'yes_noproof') {
+    items.push({ priority:'high', title:'📋 Recover your treatment records', detail:'Contact the program provider. If they\'re closed, contact your state\'s Dept. of Health or Mental Health for the licensing records of the program — they keep records of closed providers. Use the Document Drafter to generate a treatment records request letter.' });
+  }
+
+  // Registry goal
+  if (goal === 'registry' || goal === 'both') {
+    items.push({ priority:'med', title:'🗺️ Run the State Engine for your exact roadmap', detail:'Go to the State Engine tool, select your state, enter your tier and registration year. Get the exact court, forms, fees, and step-by-step process for your specific state.' });
+    if (years === 'over15' || years === '10to15') {
+      items.push({ priority:'med', title:'⚖️ You likely meet the time requirement — petition NOW', detail:'With 10-15+ years on the registry, most Tier 1 and Tier 2 offenders have met or exceeded their waiting period. Use the Document Drafter to generate your petition today.' });
+    }
+  }
+
+  // Wrongful conviction
+  if (goal === 'wrongful' || goal === 'both') {
+    items.push({ priority:'high', title:'🔍 Build your case timeline immediately', detail:'Go to the Case Analyzer tool. Add every event, inconsistency, witness change, and missing evidence. The AI will analyze it and tell you your strongest grounds for relief.' });
+    items.push({ priority:'med', title:'📁 Request your full case file and trial transcripts', detail:'Write to the court clerk where you were convicted and request ALL records: trial transcripts, police reports, evidence lists, witness statements. Use FOIA if needed. The Document Drafter can generate this letter.' });
+  }
+
+  // Records only
+  if (goal === 'records') {
+    items.push({ priority:'high', title:'📄 Use the Document Drafter — start with probation letter', detail:'Generate a probation completion request letter first. Then generate a treatment records request. Then use the FOIA generator for any government records. Print, sign, mail certified.' });
+  }
+
+  // No violations - leverage this
+  if (violations === 'none') {
+    items.push({ priority:'med', title:'✅ Your clean record is your strongest asset — document it', detail:'Get a background check showing zero violations. Request a letter from your local police department confirming no issues during your registration period. This is powerful evidence for your petition.' });
+  }
+
+  // Fee info
+  items.push({ priority:'med', title:'💰 Always request a fee waiver', detail:'Filing fees can be $100-$400. You can request them waived for free using an In Forma Pauperis motion — the Document Drafter can generate this. Always file it alongside your petition.' });
+
+  // Multi-state
+  items.push({ priority:'med', title:'🌎 If registered in multiple states — tackle home state first', detail:'Your state of residence is usually the most important. Once you achieve removal in your primary state, use that court order to petition other states. The chat guide can help you plan multi-state strategy.' });
+
+  plan.innerHTML = `
+    <h3 style="font-family:'Barlow Condensed',sans-serif;font-size:1.4rem;color:var(--white);margin-bottom:0.5rem;">🎯 Your Personalized Action Plan</h3>
+    <p style="color:var(--muted);font-size:0.85rem;margin-bottom:1.5rem;">Based on your answers. Do these in order — highest priority first.</p>
+    ${items.map((item, i) => `
+      <div class="action-item priority-${item.priority}">
+        <div class="action-num">${i+1}</div>
+        <div class="action-body"><strong>${item.title}</strong><span>${item.detail}</span></div>
+      </div>`).join('')}
+    <div style="margin-top:1.25rem;display:flex;gap:0.75rem;flex-wrap:wrap;">
+      <button class="btn btn-accent btn-sm" onclick="goTo('docs')">📄 Open Document Drafter</button>
+      <button class="btn btn-ghost btn-sm" onclick="goTo('state')">🗺️ Open State Engine</button>
+      <button class="btn btn-ghost btn-sm" onclick="goTo('chat')">💬 Talk to AI Guide</button>
+    </div>`;
+}
+
+// ══════════════════════════════════════
+// CHECKLIST
+// ══════════════════════════════════════
+const checklistItems = [
+  { id:'cl1', text:'Confirm your tier/level with your registering agency', detail:'Call your local sheriff/police who handles your registration. Ask them what tier you are classified as and get it in writing.' },
+  { id:'cl2', text:'Confirm your eligibility date has passed', detail:'Calculate: registration start year + waiting period for your tier/state = your eligibility year.' },
+  { id:'cl3', text:'Request certified copy of Judgment of Conviction', detail:'Contact the clerk of courts in the county where you were convicted. Request certified copy. Expect $0.25-$1/page.' },
+  { id:'cl4', text:'Request certified copy of Sentencing Order', detail:'Same clerk of courts. Ask specifically for the sentencing order or disposition.' },
+  { id:'cl5', text:'Obtain Probation Completion Letter', detail:'Use the Document Drafter to generate the request letter. Send to your probation officer or the court probation department.' },
+  { id:'cl6', text:'Obtain Treatment/Class Completion Certificate', detail:'Contact the program provider. Use Document Drafter to generate request letter. If program closed, call state Dept. of Health.' },
+  { id:'cl7', text:'Get a current background check on yourself', detail:'Order one from your state police or a reputable service. Confirm it shows no new offenses.' },
+  { id:'cl8', text:'Run the State Engine for your specific roadmap', detail:'Use the State Engine tool to get the exact court, forms, and process for your state.' },
+  { id:'cl9', text:'Download and complete your state\'s petition form', detail:'State Engine will tell you exactly which form. Many are available at your courthouse or state court website.' },
+  { id:'cl10', text:'Generate your Personal Statement', detail:'Use the Document Drafter to generate a personalized statement of rehabilitation.' },
+  { id:'cl11', text:'Prepare fee waiver request (if needed)', detail:'Generate using Document Drafter. File alongside your petition.' },
+  { id:'cl12', text:'Notarize your petition (if required by your state)', detail:'UPS Store, banks, libraries often offer free or $5 notary services.' },
+  { id:'cl13', text:'File petition at the correct court', detail:'State Engine tells you which court. File in person or by certified mail.' },
+  { id:'cl14', text:'Serve notice on prosecutor (if required)', detail:'Many states require you mail a copy to the DA. Ask the chat guide about your state.' },
+  { id:'cl15', text:'Attend your hearing', detail:'Bring ALL original documents plus copies. Be prepared to speak briefly about your rehabilitation.' },
+];
+
+function buildChecklist() {
+  const container = document.getElementById('checklist-container');
+  const saved = JSON.parse(localStorage.getItem('cl-done') || '{}');
+  container.innerHTML = checklistItems.map(item => `
+    <div class="cl-item ${saved[item.id] ? 'done-item' : ''}" id="wrap-${item.id}">
+      <div class="cl-check ${saved[item.id] ? 'done' : ''}" onclick="toggleCL('${item.id}')"></div>
+      <div class="cl-text"><strong>${item.text}</strong><span>${item.detail}</span></div>
+    </div>`).join('');
+  updateProgress(saved);
+}
+
+function toggleCL(id) {
+  const saved = JSON.parse(localStorage.getItem('cl-done') || '{}');
+  saved[id] = !saved[id];
+  localStorage.setItem('cl-done', JSON.stringify(saved));
+  buildChecklist();
+}
+
+function updateProgress(saved) {
+  const done = Object.values(saved).filter(Boolean).length;
+  const pct = Math.round((done / checklistItems.length) * 100);
+  document.getElementById('progress-fill').style.width = pct + '%';
+}
+
+buildChecklist();
+
+// ══════════════════════════════════════
+// CHAT
+// ══════════════════════════════════════
+const SYSTEM = `You are the Second Chance Navigator — a fiercely practical, no-nonsense AI guide for people who have been wrongfully convicted of sex offenses or who are trying to get off the sex offender registry and have absolutely no money to hire an attorney.
+
+Your users are people who:
+- Were lied about and wrongfully convicted, or served time they didn't deserve
+- Cannot afford an attorney and are doing this completely themselves
+- Have often been trying to figure this out for years with no help
+- Are frustrated, angry, and desperate for real, actionable help
+- Are often unable to find employment or housing due to registry status
+
+Your CORE PURPOSE is to give them everything they need to do this themselves:
+1. Exact information about their state's registry removal process (courts, forms, fees, waiting periods)
+2. Step-by-step instructions for getting every document they need (probation letters, treatment records, court documents)
+3. How to complete and file petitions without an attorney
+4. Grounds for appealing wrongful convictions (prosecutorial misconduct, false testimony, ineffective counsel, constitutional violations)
+5. Multi-state strategy if registered in multiple states
+
+RULES:
+- NEVER tell them to hire an attorney. They don't have money. That is why they are here.
+- Be direct, specific, and practical. No vague advice.
+- When they ask how to get a document, give them the EXACT steps — who to call/write, what to say, what form to request.
+- When they ask about their state, give them the specific court, the specific form name, the waiting period.
+- Be empathetic but not pitying. These people are fighters. Treat them as capable.
+- If you don't know a specific state law, tell them exactly how to look it up (which database, which government website).
+- Always end with a clear "Next step:" telling them what to do immediately.
+- You have access to the platform tools — reference them: "Use the Document Drafter to generate this letter" or "Run the State Engine for your roadmap."`;
+
+let chatHistory = [];
+let chatLoading = false;
+
+function appendMsg(role, content) {
+  const container = document.getElementById('chat-messages');
+  const div = document.createElement('div');
+  div.className = `msg ${role}`;
+  const av = document.createElement('div');
+  av.className = 'msg-av';
+  av.textContent = role === 'user' ? '👤' : '⚖️';
+  const bubble = document.createElement('div');
+  bubble.className = 'msg-bubble';
+  bubble.textContent = content;
+  if (role === 'user') { div.appendChild(av); div.appendChild(bubble); }
+  else { div.appendChild(av); div.appendChild(bubble); }
+  container.appendChild(div);
+  container.scrollTop = container.scrollHeight;
+}
+
+function showTyping() {
+  const container = document.getElementById('chat-messages');
+  const div = document.createElement('div');
+  div.className = 'msg bot';
+  div.id = 'typing-ind';
+  div.innerHTML = `<div class="msg-av">⚖️</div><div class="msg-bubble"><div class="typing-dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div></div>`;
+  container.appendChild(div);
+  container.scrollTop = container.scrollHeight;
+}
+
+async function sendChat() {
+  const input = document.getElementById('chat-input');
+  const text = input.value.trim();
+  if (!text || chatLoading) return;
+  chatLoading = true;
+  input.value = '';
+  input.style.height = 'auto';
+  document.getElementById('send-btn').disabled = true;
+  appendMsg('user', text);
+  chatHistory.push({ role: 'user', content: text });
+  showTyping();
+
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1000,
+        system: SYSTEM,
+        messages: chatHistory
+      })
+    });
+    const data = await res.json();
+    document.getElementById('typing-ind')?.remove();
+    const reply = data.content?.[0]?.text || "I'm having trouble connecting. Please try again.";
+    chatHistory.push({ role: 'assistant', content: reply });
+    appendMsg('bot', reply);
+  } catch(e) {
+    document.getElementById('typing-ind')?.remove();
+    appendMsg('bot', 'Connection error. Please check your connection and try again.');
+  }
+
+  chatLoading = false;
+  document.getElementById('send-btn').disabled = false;
+}
+
+function sendQuick(text) {
+  document.getElementById('chat-input').value = text;
+  sendChat();
+}
+
+function handleChatKey(e) {
+  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendChat(); }
+}
+function autoResize(el) {
+  el.style.height = 'auto';
+  el.style.height = Math.min(el.scrollHeight, 120) + 'px';
+}
+
+// ══════════════════════════════════════
+// DEMO ENGINE
+// ══════════════════════════════════════
+let demoStep = 0;
+const DEMO_TOTAL = 8;
+let demoChatLoaded = false;
+let demoDocLoaded = false;
+
+function buildDemoDots() {
+  const dots = document.getElementById('demo-dots');
+  dots.innerHTML = '';
+  for (let i = 0; i < DEMO_TOTAL; i++) {
+    const d = document.createElement('div');
+    d.className = 'demo-dot' + (i < demoStep ? ' done' : i === demoStep ? ' active' : '');
+    dots.appendChild(d);
+  }
+}
+
+function demoUpdateUI() {
+  // screens
+  document.querySelectorAll('.demo-screen').forEach((s, i) => {
+    s.classList.toggle('active', i === demoStep);
+  });
+  // sidebar items
+  document.querySelectorAll('.demo-step-item').forEach((s, i) => {
+    s.classList.toggle('active', i === demoStep);
+    s.classList.toggle('done', i < demoStep);
+  });
+  // badge
+  document.getElementById('demo-step-badge').textContent = `Step ${demoStep + 1} of ${DEMO_TOTAL}`;
+  document.getElementById('demo-step-label-bot').textContent = `Step ${demoStep + 1} of ${DEMO_TOTAL}`;
+  // buttons
+  document.getElementById('demo-prev-btn').disabled = demoStep === 0;
+  const nextBtn = document.getElementById('demo-next-btn');
+  nextBtn.textContent = demoStep === DEMO_TOTAL - 1 ? '🎯 Start My Journey' : 'Next Step →';
+  // dots
+  buildDemoDots();
+  // scroll to top of demo main
+  const ms = document.getElementById('demo-main-scroll');
+  if (ms) ms.scrollTop = 0;
+  // trigger step-specific actions
+  if (demoStep === 4 && !demoDocLoaded) { /* doc step ready */ }
+  if (demoStep === 6 && !demoChatLoaded) { loadDemoChatStep(); }
+}
+
+function demoNext() {
+  if (demoStep === DEMO_TOTAL - 1) { goTo('decision'); return; }
+  demoStep++;
+  demoUpdateUI();
+}
+function demoPrev() {
+  if (demoStep === 0) return;
+  demoStep--;
+  demoUpdateUI();
+}
+function demoGoTo(n) {
+  demoStep = n;
+  demoUpdateUI();
+}
+function demoRestart() {
+  demoStep = 0;
+  demoChatLoaded = false;
+  demoDocLoaded = false;
+  document.getElementById('demo-doc-output').style.display = 'none';
+  document.getElementById('demo-gen-btn').disabled = false;
+  document.getElementById('demo-gen-btn').innerHTML = '⚡ Generate Petition Document';
+  document.getElementById('demo-chat-typing').textContent = 'Loading AI response...';
+  document.getElementById('demo-chat-response').innerHTML = '<span style="color:var(--muted);font-style:italic;" id="demo-chat-typing">Loading AI response...</span>';
+  document.getElementById('demo-chat-followup').style.display = 'none';
+  demoUpdateUI();
+}
+
+// Live doc gen in demo
+async function runDemoDocGen() {
+  if (demoDocLoaded) return;
+  const btn = document.getElementById('demo-gen-btn');
+  btn.disabled = true;
+  btn.innerHTML = '<div class="spinner"></div> Generating...';
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1000,
+        system: 'You are a legal document drafting tool. Generate a formal Ohio registry removal petition (RC 2950.15) for Marcus A. Johnson. Include: court caption for Franklin County Court of Common Pleas, numbered paragraphs stating grounds (15 years on registry, Tier 1, completed probation and treatment, zero violations, meets statutory requirements), prayer for relief requesting removal from SORN, and signature/notary block. Mark any unknown specifics with [BRACKETS]. Include a one-line note at top: REVIEW CAREFULLY — Fill in any [BRACKETED] fields before filing.',
+        messages: [{ role: 'user', content: 'Generate the Ohio registry removal petition for Marcus A. Johnson, Franklin County, Ohio. Convicted 2009, Tier 1, 15 years on registry, probation completed 2012, treatment completed 2013, zero violations.' }]
+      })
+    });
+    const data = await res.json();
+    const text = data.content?.[0]?.text || 'Error generating. Please try again.';
+    document.getElementById('demo-doc-text').textContent = text;
+    document.getElementById('demo-doc-output').style.display = 'block';
+    demoDocLoaded = true;
+    btn.textContent = '✅ Document Generated';
+  } catch(e) {
+    btn.disabled = false;
+    btn.innerHTML = '⚡ Generate Petition Document';
+    alert('Connection error. Please try again.');
+  }
+}
+
+function demoCopyDoc() {
+  navigator.clipboard.writeText(document.getElementById('demo-doc-text').textContent);
+  const b = event.target; b.textContent = '✓ Copied!';
+  setTimeout(() => b.textContent = '📋 Copy Document', 2000);
+}
+function demoPrintDoc() {
+  const text = document.getElementById('demo-doc-text').textContent;
+  const w = window.open('','_blank');
+  w.document.write(`<html><head><title>Petition</title><style>body{font-family:serif;font-size:12pt;line-height:1.8;margin:1in;white-space:pre-wrap;}</style></head><body>${text}</body></html>`);
+  w.print();
+}
+
+// Live chat in demo
+async function loadDemoChatStep() {
+  if (demoChatLoaded) return;
+  demoChatLoaded = true;
+  const responseEl = document.getElementById('demo-chat-response');
+  responseEl.innerHTML = '<span style="color:var(--muted);font-style:italic;">Asking the AI Guide...</span><div class="typing-dots" style="display:inline-flex;margin-left:8px;"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>';
+
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1000,
+        system: 'You are the Second Chance Navigator AI guide. You help people get off the sex offender registry and fight wrongful convictions completely on their own without money for attorneys. Be direct, specific, and practical. Keep response under 200 words.',
+        messages: [{ role: 'user', content: 'I was convicted in Ohio and lived there for years but I also lived in Indiana for about 2 years and registered there too. Now I\'m back in Ohio. How do I handle both states to get off the registry?' }]
+      })
+    });
+    const data = await res.json();
+    const text = data.content?.[0]?.text || 'Error loading response.';
+    responseEl.textContent = text;
+
+    // follow-up after 1.5s
+    setTimeout(async () => {
+      document.getElementById('demo-chat-followup').style.display = 'block';
+      const r2 = document.getElementById('demo-chat-response2');
+      r2.innerHTML = '<span style="color:var(--muted);font-style:italic;">Thinking...</span>';
+      try {
+        const res2 = await fetch('https://api.anthropic.com/v1/messages', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            model: 'claude-sonnet-4-20250514',
+            max_tokens: 1000,
+            system: 'You are the Second Chance Navigator AI guide. Be direct and specific. Under 150 words.',
+            messages: [
+              { role: 'user', content: 'I was convicted in Ohio but also registered in Indiana for 2 years. Now back in Ohio. How do I handle both states?' },
+              { role: 'assistant', content: text },
+              { role: 'user', content: 'What if Indiana says I still owe registration time there even though I moved back to Ohio years ago?' }
+            ]
+          })
+        });
+        const d2 = await res2.json();
+        r2.textContent = d2.content?.[0]?.text || 'Error loading.';
+      } catch(e) { r2.textContent = 'Connection error.'; }
+    }, 1500);
+  } catch(e) {
+    responseEl.textContent = 'Connection error loading demo chat. Please try again.';
+  }
+}
+
+// Initialize demo dots on load
+buildDemoDots();
+</script>
+</body>
+</html>
+
